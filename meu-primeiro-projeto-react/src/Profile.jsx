@@ -3,7 +3,7 @@ import { useState } from "react";
 function Profile(props) {
   //criando o estado curtidas começando com 0
   const [curtidas, setCurtidas] = useState(0);
-  const [favorito, setFavorito] = useState(0);
+  const [favorito, setFavorito] = useState(false);
   const [status, setStatus] = useState("Disponivel");
 
   //sera chamada quando o botao clicar
@@ -11,8 +11,8 @@ function Profile(props) {
     setCurtidas(curtidas + 1); //atualiza o estado somando 1
   }
 
-  function adicionarFavorito() {
-    setFavorito(favorito + 1);
+  function alternarFavorito() {
+    setFavorito(!favorito);
   }
 
   function mudarStatus(evento) {
@@ -35,10 +35,12 @@ function Profile(props) {
       />
 
       <p>❤️ Curtidas: {curtidas}</p>
-      <p>⭐ favorito: {favorito}</p>
+      {favorito && <p>⭐ Este perfil está nos favoritos!</p>}
 
       <button onClick={adicionarCurtidas}>Curtir perfil</button>
-      <button onClick={adicionarFavorito}>Colocar nos favoritos</button>
+      <button onClick={alternarFavorito}>
+        {favorito ? "Remover dos favoritos" : "Colocar nos favoritos"}
+      </button>
     </div>
   );
 }
