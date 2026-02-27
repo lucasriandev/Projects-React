@@ -1,21 +1,58 @@
-import Profile from "./Profile";
+import { useState } from "react";
 
 function App() {
-  const listaDePerfil = [
-    { id: 1, nome: "Lucas Rian", cargo: "Desenvolvedor Front-End" },
-    { id: 2, nome: "Jojo", cargo: "Desenvolvedor Back-And" },
-    { id: 3, nome: "Nicks", cargo: "Desenvolvedor FullStack" },
-    { id: 4, nome: "Leozinho", cargo: "Design" },
-  ];
+  //memoria da lista começa como vazio
+  const [tarefas, setTarefas] = useState([]);
+  const [novaTarefa, setNovaTarefas] = useState("");
+
+  function lidarComMundanca(evento) {
+    setNovaTarefas(evento.target.value);
+  }
+
+  function adicionarTarefa() {
+    if (novaTarefa !== "") {
+      //pega toda lista antiga e cria uma nova com o novo item
+      setTarefas([...tarefas, novaTarefa]);
+      setNovaTarefas("");
+    }
+  }
+
+  function removerTarefa(indexRemover) {
+    // O filter varre a lista e só guarda quem for diferente do index que queremos apagar
+    const listaAtualizada = tarefas.filter(
+      (tarefas, indexAtual) => indexAtual !== indexRemover,
+    );
+
+    setTarefas(listaAtualizada);
+  }
 
   return (
     <div>
-      <h1>Sistema de Perfil</h1>
+      <h1>Minhas Tarefas do Dia</h1>
       <hr />
 
-      {listaDePerfil.map((pessoa) => (
-        <Profile key={pessoa.id} nome={pessoa.nome} cargo={pessoa.cargo} />
-      ))}
+      <input
+        type="text"
+        placeholder="O que precisa ser feito?"
+        value={novaTarefa} //Conecta o input ao estado para podermos limpá-lo depois
+        onChange={lidarComMundanca}
+      />
+
+      <button onClick={adicionarTarefa}>Adicionar</button>
+
+      <ul>
+        {tarefas.map((tarefas, index) => (
+          <li key={index}>
+            {tarefas}
+            <button
+              onClick={() => removerTarefa(index)}
+              style={{ marginLeft: "10px" }}
+            >
+              Excluir
+            </button>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
