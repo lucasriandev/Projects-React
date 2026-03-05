@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function App() {
   // 1. O Estado (A Memória)
@@ -6,6 +6,20 @@ function App() {
   const [tarefas, setTarefas] = useState([]);
   // ITEM ÚNICO QUE ESTÁ SENDO DIGITADO (Singular)
   const [novaTarefa, setNovaTarefa] = useState("");
+
+  useEffect(() => {
+    const tarefasSalvas = localStorage.getItem("MinhasTarefas");
+
+    if (tarefasSalvas) {
+      setTarefas(JSON.parse(tarefasSalvas));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (tarefas.length > 0) {
+      localStorage.setItem("MinhasTarefas", JSON.stringify(tarefas));
+    }
+  }, [tarefas]);
 
   // 2. O Catcher (Captura o que é digitado)
   function lidarComMudanca(evento) {
@@ -28,6 +42,10 @@ function App() {
       (tarefa, indexAtual) => indexAtual !== indexRemover,
     );
     setTarefas(listaAtualizada);
+
+    if (listaAtualizada.length === 0) {
+      localStorage.removeItem("MinhasTarefas");
+    }
   }
 
   // 5. READ (O "R" do CRUD) - Renderizando na tela
@@ -63,38 +81,3 @@ function App() {
 }
 
 export default App;
-
-/*// (MAP) Temos uma lista crua no JavaScript:
-
-const tarefas = ["Estudar", "Comprar pão"];
-
-// O React não sabe imprimir texto solto, ele precisa de HTML.
-// O map vai pegar cada palavra e "embrulhar" na tag <li>
-tarefas.map((tarefa) => {
-   return <li>{tarefa}</li> 
-})
-
-// O resultado invisível que o map gera e entrega pro React é:
-// [ <li>Estudar</li>, <li>Comprar pão</li> ]
-//Resumo do map: "Pegue essa lista de textos, transforme cada um em um 
-pedaço de HTML e me devolva a lista nova pronta para a tela." 
-*/
-/*(filter)
-// A lista tem 3 tarefas (posições 0, 1 e 2)
-const tarefas = ["Estudar", "Limpar casa", "Dormir"];
-
-// O usuário clicou no botão excluir do "Limpar casa" (que é o index 1).
-// O filter vai varrer a lista e perguntar: "Seu index é DIFERENTE de 1?"
-
-const listaNova = tarefas.filter((tarefa, indexAtual) => {
-   return indexAtual !== 1; // Só retorna TRUE se for diferente de 1
-});
-
-// Posição 0 ("Estudar"): 0 é diferente de 1? SIM. (Passa!)
-// Posição 1 ("Limpar casa"): 1 é diferente de 1? NÃO. (Barrado!)
-// Posição 2 ("Dormir"): 2 é diferente de 1? SIM. (Passa!)
-
-// O resultado final é uma lista nova sem o item 1:
-// ["Estudar", "Dormir"]
-Resumo do filter: "Varre essa lista e crie uma lista nova apenas com os itens que passarem no meu teste."
-*/
