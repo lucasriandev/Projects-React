@@ -1,50 +1,75 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-function teste() {
-  const [devedor, setDevedor] = useState([]); //arrau inicial
-  const [contaNova, setContaNova] = useState(""); //value do input
+// A CAIXA ABRE AQUI
+function Estoque() {
+  // 1. ESTADOS
+  const [produto, setProduto] = useState([]);
+  const [produtoNovo, setProdutoNovo] = useState(""); // Deixei vazio "" para o input começar limpo
 
-  function receberInput(event) {
-    setContaNova(event.target.value);
+  // 2. EFEITOS
+  useEffect(() => {
+    const produtoSalvo = localStorage.getItem("MeusProdutos");
+    if (produtoSalvo) {
+      setProduto(JSON.parse(produtoSalvo));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (produto.length > 0) {
+      localStorage.setItem("MeusProdutos", JSON.stringify(produto));
+    }
+  }, [produto]); // Adicionei o [produto] aqui para ele vigiar a lista!
+
+  // 3. FUNÇÕES
+  function CapturaInput(evento) {
+    setProdutoNovo(evento.target.value);
   }
 
-  function adicionarNovaConta() {
-    //"Só adiciona se o usuário tiver digitado alguma coisa."
-    if (contaNova !== "") {
-      setDevedor([...devedor, contaNova]); //Cria um novo array com os valores antigos + a nova conta
-      setContaNova("");
+  function AddProduto() {
+    if (produtoNovo !== "") {
+      setProduto([...produto, produtoNovo]);
+      setProdutoNovo("");
     }
   }
 
-  function remover(indexRemove) {
-    const listaDevedoraAtualizada = devedor.filter(
-      (devendo, indexAtual) => indexAtual !== indexRemove,
+  function removeProduto(indexRemove) {
+    const listaProdutosNova = produto.filter(
+      (produt, indexA) => indexA !== indexRemove,
     );
-    setDevedor(listaDevedoraAtualizada);
+    setProduto(listaProdutosNova);
+
+    if (listaProdutosNova.length === 0) {
+      localStorage.removeItem("MeusProdutos");
+    }
   }
 
+  // 4. TELA
   return (
     <div>
-      <h1>O que falta pagar!</h1>
+      <h1>MEUS PRODUTOS</h1>
+      <hr />
 
+      {/* 1. O Campo de digitar e o botão de salvar */}
       <input
         type="text"
-        placeholder="Nova conta?"
-        value={contaNova}
-        onChange={receberInput}
+        placeholder="Digite o nome do produto..."
+        value={produtoNovo} // Conecta a caixinha com a memória do React
+        onChange={CapturaInput} // Avisa o React cada vez que você digita uma letra
       />
+      <button onClick={AddProduto}>Cadastrar Produto</button>
 
-      <button onClick={adicionarNovaConta}>Adicionar</button>
-
+      {/* 2. A Lista de Produtos na Prateleira */}
       <ul>
-        {devedor.map((devedor, index) => (
+        {/* O map vai varrer a sua lista e criar uma <li> para cada produto */}
+        {produto.map((item, index) => (
           <li key={index}>
-            {devedor}
+            {item}
+            {/* O botão de remover que chama a sua função passando o número (index) do item */}
             <button
-              onClick={() => remover(index)}
+              onClick={() => removeProduto(index)}
               style={{ marginLeft: "10px" }}
             >
-              Excluir
+              Remover
             </button>
           </li>
         ))}
@@ -53,39 +78,4 @@ function teste() {
   );
 }
 
-export default teste;
-
-/*// (MAP) Temos uma lista crua no JavaScript:
-
-const tarefas = ["Estudar", "Comprar pão"];
-
-// O React não sabe imprimir texto solto, ele precisa de HTML.
-// O map vai pegar cada palavra e "embrulhar" na tag <li>
-tarefas.map((tarefa) => {
-   return <li>{tarefa}</li> 
-})
-
-// O resultado invisível que o map gera e entrega pro React é:
-// [ <li>Estudar</li>, <li>Comprar pão</li> ]
-//Resumo do map: "Pegue essa lista de textos, transforme cada um em um 
-pedaço de HTML e me devolva a lista nova pronta para a tela." 
-*/
-/*(filter)
-// A lista tem 3 tarefas (posições 0, 1 e 2)
-const tarefas = ["Estudar", "Limpar casa", "Dormir"];
-
-// O usuário clicou no botão excluir do "Limpar casa" (que é o index 1).
-// O filter vai varrer a lista e perguntar: "Seu index é DIFERENTE de 1?"
-
-const listaNova = tarefas.filter((tarefa, indexAtual) => {
-   return indexAtual !== 1; // Só retorna TRUE se for diferente de 1
-});
-
-// Posição 0 ("Estudar"): 0 é diferente de 1? SIM. (Passa!)
-// Posição 1 ("Limpar casa"): 1 é diferente de 1? NÃO. (Barrado!)
-// Posição 2 ("Dormir"): 2 é diferente de 1? SIM. (Passa!)
-
-// O resultado final é uma lista nova sem o item 1:
-// ["Estudar", "Dormir"]
-Resumo do filter: "Varre essa lista e crie uma lista nova apenas com os itens que passarem no meu teste."
-*/
+export default Estoque; // Exportando o nome certinho
