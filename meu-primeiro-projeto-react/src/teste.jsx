@@ -1,51 +1,50 @@
 import { useState, useEffect } from "react";
 
-function Afazeres() {
-  const [atividade, setAtividade] = useState([]);
-  const [novaAtividade, setNovaAtividade] = useState("");
-  //atividade → lista de tarefas
-  //setAtividade → atualiza a lista
-  //novaAtividade → o que está sendo digitado
-  //setNovaAtividade → atualiza o input
-
-  useEffect(() => {
-    const chave = JSON.parse(localStorage.getItem("Att")) || [];
-    setAtividade[chave];
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem("Att", JSON.stringify(atividade));
-  }, [atividade]);
+function Animes() {
+  const [anime, setAnime] = useState([]);
+  //sera usado sempre que for mexer na lista
+  const [novoAnime, setNovoAnime] = useState("");
+  //sera usado sempre que usuario digitar
 
   function input(event) {
-    setNovaAtividade(event.target.value);
+    setNovoAnime(event.target.value);
   }
 
-  function adicionar() {
-    if (novaAtividade !== "") {
-      setAtividade([...atividade, novaAtividade]); //pega lista antiga e adiciona o novo item
-      setNovaAtividade("");
+  function add() {
+    if (novoAnime !== "") {
+      setAnime([...anime, novoAnime]);
+      setNovoAnime("");
     }
+  }
+
+  function remover(indexRemover) {
+    const novaLista = anime.filter((item, index) => {
+      return index !== indexRemover;
+    });
+    setAnime(novaLista);
   }
 
   return (
     <div>
-      <h1>Lista de tarefas</h1>
+      <h1>Lista de Animes</h1>
       <input
         type="text"
-        value={novaAtividade}
+        value={novoAnime}
         onChange={input}
-        placeholder="Digite sua tarefa"
+        placeholder="Digite"
       />
-      <button onClick={adicionar}>Adicionar</button>
+      <button onClick={add}>Adicionar</button>
 
       <ul>
-        {atividade.map((tarefa, index) => (
-          <li key={index}>{atividade}</li>
+        {anime.map((item, index) => (
+          <li key={index}>
+            {item}
+            <button onClick={() => remover(index)}>Remover</button>
+          </li>
         ))}
       </ul>
     </div>
   );
 }
 
-export default Afazeres;
+export default Animes;
