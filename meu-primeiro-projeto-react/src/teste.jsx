@@ -1,44 +1,51 @@
 import { useState, useEffect } from "react";
 
-function AtividadesDeAmanha() {
+function Afazeres() {
   const [atividade, setAtividade] = useState([]);
   const [novaAtividade, setNovaAtividade] = useState("");
+  //atividade → lista de tarefas
+  //setAtividade → atualiza a lista
+  //novaAtividade → o que está sendo digitado
+  //setNovaAtividade → atualiza o input
 
   useEffect(() => {
-    const atividadeStorage =
-      JSON.parse(localStorage.getItem("Atividades")) || [];
-    setAtividade(atividadeStorage);
+    const chave = JSON.parse(localStorage.getItem("Att")) || [];
+    setAtividade[chave];
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("Atividades", JSON.stringify(atividade));
+    localStorage.setItem("Att", JSON.stringify(atividade));
   }, [atividade]);
 
-  function capturarEventos(event) {
+  function input(event) {
     setNovaAtividade(event.target.value);
   }
 
-  function AddAtividade() {
+  function adicionar() {
     if (novaAtividade !== "") {
-      setAtividade([...atividade, novaAtividade]);
+      setAtividade([...atividade, novaAtividade]); //pega lista antiga e adiciona o novo item
       setNovaAtividade("");
     }
   }
 
   return (
     <div>
-      <h1>Atividades</h1>
-
+      <h1>Lista de tarefas</h1>
       <input
         type="text"
-        placeholder="Digite sua atividade!"
         value={novaAtividade}
-        onChange={capturarEventos}
+        onChange={input}
+        placeholder="Digite sua tarefa"
       />
+      <button onClick={adicionar}>Adicionar</button>
 
-      <button onClick={AddAtividade}>Adicionar</button>
+      <ul>
+        {atividade.map((tarefa, index) => (
+          <li key={index}>{atividade}</li>
+        ))}
+      </ul>
     </div>
   );
 }
 
-export default AtividadesDeAmanha;
+export default Afazeres;
