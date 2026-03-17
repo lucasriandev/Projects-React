@@ -1,81 +1,44 @@
 import { useState, useEffect } from "react";
 
-// A CAIXA ABRE AQUI
-function Estoque() {
-  // 1. ESTADOS
-  const [produto, setProduto] = useState([]);
-  const [produtoNovo, setProdutoNovo] = useState(""); // Deixei vazio "" para o input começar limpo
+function AtividadesDeAmanha() {
+  const [atividade, setAtividade] = useState([]);
+  const [novaAtividade, setNovaAtividade] = useState("");
 
-  // 2. EFEITOS
   useEffect(() => {
-    const produtoSalvo = localStorage.getItem("MeusProdutos");
-    if (produtoSalvo) {
-      setProduto(JSON.parse(produtoSalvo));
-    }
+    const atividadeStorage =
+      JSON.parse(localStorage.getItem("Atividades")) || [];
+    setAtividade(atividadeStorage);
   }, []);
 
   useEffect(() => {
-    if (produto.length > 0) {
-      localStorage.setItem("MeusProdutos", JSON.stringify(produto));
-    }
-  }, [produto]); // Adicionei o [produto] aqui para ele vigiar a lista!
+    localStorage.setItem("Atividades", JSON.stringify(atividade));
+  }, [atividade]);
 
-  // 3. FUNÇÕES
-  function CapturaInput(evento) {
-    setProdutoNovo(evento.target.value);
+  function capturarEventos(event) {
+    setNovaAtividade(event.target.value);
   }
 
-  function AddProduto() {
-    if (produtoNovo !== "") {
-      setProduto([...produto, produtoNovo]);
-      setProdutoNovo("");
+  function AddAtividade() {
+    if (novaAtividade !== "") {
+      setAtividade([...atividade, novaAtividade]);
+      setNovaAtividade("");
     }
   }
 
-  function removeProduto(indexRemove) {
-    const listaProdutosNova = produto.filter(
-      (produt, indexA) => indexA !== indexRemove,
-    );
-    setProduto(listaProdutosNova);
-
-    if (listaProdutosNova.length === 0) {
-      localStorage.removeItem("MeusProdutos");
-    }
-  }
-
-  // 4. TELA
   return (
     <div>
-      <h1>MEUS PRODUTOS</h1>
-      <hr />
+      <h1>Atividades</h1>
 
-      {/* 1. O Campo de digitar e o botão de salvar */}
       <input
         type="text"
-        placeholder="Digite o nome do produto..."
-        value={produtoNovo} // Conecta a caixinha com a memória do React
-        onChange={CapturaInput} // Avisa o React cada vez que você digita uma letra
+        placeholder="Digite sua atividade!"
+        value={novaAtividade}
+        onChange={capturarEventos}
       />
-      <button onClick={AddProduto}>Cadastrar Produto</button>
 
-      {/* 2. A Lista de Produtos na Prateleira */}
-      <ul>
-        {/* O map vai varrer a sua lista e criar uma <li> para cada produto */}
-        {produto.map((item, index) => (
-          <li key={index}>
-            {item}
-            {/* O botão de remover que chama a sua função passando o número (index) do item */}
-            <button
-              onClick={() => removeProduto(index)}
-              style={{ marginLeft: "10px" }}
-            >
-              Remover
-            </button>
-          </li>
-        ))}
-      </ul>
+      <button onClick={AddAtividade}>Adicionar</button>
     </div>
   );
 }
 
-export default Estoque; // Exportando o nome certinho
+export default AtividadesDeAmanha;
