@@ -1,45 +1,47 @@
 import { useState, useEffect } from "react";
 
-function Animes() {
-  const [anime, setAnime] = useState([]);
-  //sera usado sempre que for mexer na lista
-  const [novoAnime, setNovoAnime] = useState("");
-  //sera usado sempre que usuario digitar
+function Metas() {
+  const [metas, setMetas] = useState(() => {
+    return JSON.parse(localStorage.getItem("Metas")) || [];
+  });
+  //lista
+  const [NOVAMETA, SETNOVAMETA] = useState("");
+  //input
 
-  function input(event) {
-    setNovoAnime(event.target.value);
+  useEffect(() => {
+    localStorage.setItem("Metas", JSON.stringify(metas));
+  }, [metas]);
+
+  function Input(event) {
+    SETNOVAMETA(event.target.value);
   }
 
   function add() {
-    if (novoAnime !== "") {
-      setAnime([...anime, novoAnime]);
-      setNovoAnime("");
+    if (NOVAMETA !== "") {
+      setMetas([...metas, NOVAMETA]);
+      SETNOVAMETA("");
     }
   }
 
   function remover(indexRemover) {
-    const novaLista = anime.filter((item, index) => {
-      return index !== indexRemover;
-    });
-    setAnime(novaLista);
+    const listaNova = metas.filter((item, index) => index !== indexRemover);
+    setMetas(listaNova);
+    if (listaNova.length === 0) {
+      localStorage.removeItem("Metas");
+    }
   }
 
   return (
     <div>
-      <h1>Lista de Animes</h1>
-      <input
-        type="text"
-        value={novoAnime}
-        onChange={input}
-        placeholder="Digite"
-      />
+      <h1>Metas de Hoje: </h1>
+      <input type="text" value={NOVAMETA} onChange={Input} />
       <button onClick={add}>Adicionar</button>
 
       <ul>
-        {anime.map((item, index) => (
+        {metas.map((item, index) => (
           <li key={index}>
             {item}
-            <button onClick={() => remover(index)}>Remover</button>
+            <button onClick={() => remover(index)}>remover</button>
           </li>
         ))}
       </ul>
@@ -47,4 +49,4 @@ function Animes() {
   );
 }
 
-export default Animes;
+export default Metas;

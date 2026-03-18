@@ -1,11 +1,10 @@
 import { useState, useEffect } from "react";
 
 function App() {
-  // 1. O Estado (A Memória)
-  // LISTA PRINCIPAL (Plural)
   const [tarefas, setTarefas] = useState([]);
-  // ITEM ÚNICO QUE ESTÁ SENDO DIGITADO (Singular)
+  //sera usado sempre que for mexer na lista
   const [novaTarefa, setNovaTarefa] = useState("");
+  //sera usado sempre que usuario digitar
 
   useEffect(() => {
     const tarefasSalvas = localStorage.getItem("MinhasTarefas");
