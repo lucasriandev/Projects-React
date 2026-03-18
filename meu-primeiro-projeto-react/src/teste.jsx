@@ -1,52 +1,54 @@
 import { useState, useEffect } from "react";
 
-function Metas() {
-  const [metas, setMetas] = useState(() => {
-    return JSON.parse(localStorage.getItem("Metas")) || [];
+function Personagens() {
+  const [personagens, setPersonagens] = useState(() => {
+    return JSON.parse(localStorage.getItem("person")) || [];
   });
-  //lista
-  const [NOVAMETA, SETNOVAMETA] = useState("");
-  //input
+
+  const [novoPersonagem, setNovoPersonagem] = useState("");
 
   useEffect(() => {
-    localStorage.setItem("Metas", JSON.stringify(metas));
-  }, [metas]);
+    if (personagens.length > 0) {
+      localStorage.setItem("person", JSON.stringify(personagens));
+    }
+  }, [personagens]);
 
-  function Input(event) {
-    SETNOVAMETA(event.target.value);
+  function input(event) {
+    setNovoPersonagem(event.target.value);
   }
 
-  function add() {
-    if (NOVAMETA !== "") {
-      setMetas([...metas, NOVAMETA]);
-      SETNOVAMETA("");
+  function adicionar() {
+    if (novoPersonagem !== "") {
+      setPersonagens([...personagens, novoPersonagem]);
+      setNovoPersonagem("");
     }
   }
 
-  function remover(indexRemover) {
-    const listaNova = metas.filter((item, index) => index !== indexRemover);
-    setMetas(listaNova);
+  function removerPerson(indexRemove) {
+    const listaNova = personagens.filter(
+      (item, index) => index !== indexRemove,
+    );
+
+    setPersonagens(listaNova);
     if (listaNova.length === 0) {
-      localStorage.removeItem("Metas");
+      localStorage.removeItem("person");
     }
   }
 
   return (
     <div>
-      <h1>Metas de Hoje: </h1>
-      <input type="text" value={NOVAMETA} onChange={Input} />
-      <button onClick={add}>Adicionar</button>
-
+      <h1>Personagens</h1>
+      <input type="text" value={novoPersonagem} onChange={input} />
+      <button onClick={adicionar}>Adicionar</button>
       <ul>
-        {metas.map((item, index) => (
+        {personagens.map((item, index) => (
           <li key={index}>
             {item}
-            <button onClick={() => remover(index)}>remover</button>
+            <button onClick={() => removerPerson(index)}>Remover</button>
           </li>
         ))}
       </ul>
     </div>
   );
 }
-
-export default Metas;
+export default Personagens;
