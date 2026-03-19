@@ -1,54 +1,66 @@
 import { useState, useEffect } from "react";
 
-function Personagens() {
-  const [personagens, setPersonagens] = useState(() => {
-    return JSON.parse(localStorage.getItem("person")) || [];
+function Compras() {
+  const [compras, setCompras] = useState(() => {
+    return JSON.parse(localStorage.getItem("Compras")) || [];
   });
 
-  const [novoPersonagem, setNovoPersonagem] = useState("");
+  const [comprados, setComprados] = useState(false);
+
+  const [novaCompra, setNovaCompra] = useState("");
 
   useEffect(() => {
-    if (personagens.length > 0) {
-      localStorage.setItem("person", JSON.stringify(personagens));
-    }
-  }, [personagens]);
+    localStorage.setItem("Compras", JSON.stringify(compras));
+  }, [compras]);
 
   function input(event) {
-    setNovoPersonagem(event.target.value);
+    setNovaCompra(event.target.value);
   }
 
-  function adicionar() {
-    if (novoPersonagem !== "") {
-      setPersonagens([...personagens, novoPersonagem]);
-      setNovoPersonagem("");
+  function add() {
+    if (novaCompra !== "") {
+      setCompras([...compras, novaCompra]);
+      setNovaCompra("");
     }
   }
 
-  function removerPerson(indexRemove) {
-    const listaNova = personagens.filter(
-      (item, index) => index !== indexRemove,
-    );
+  function alternarComprados() {
+    setComprados(!comprados);
+  }
 
-    setPersonagens(listaNova);
-    if (listaNova.length === 0) {
-      localStorage.removeItem("person");
+  function remover(indexRemove) {
+    const novaLista = compras.filter((item, index) => index !== indexRemove);
+    setCompras(novaLista);
+
+    if (novaLista.length === 0) {
+      localStorage.removeItem("Compras");
     }
   }
 
   return (
     <div>
-      <h1>Personagens</h1>
-      <input type="text" value={novoPersonagem} onChange={input} />
-      <button onClick={adicionar}>Adicionar</button>
+      <h1>Compras do mes!</h1>
+      <input
+        type="text"
+        value={novaCompra}
+        onChange={input}
+        placeholder="Digite!"
+      />
+      <button onClick={add}>Adicionar</button>
       <ul>
-        {personagens.map((item, index) => (
+        {compras.map((compras, index) => (
           <li key={index}>
-            {item}
-            <button onClick={() => removerPerson(index)}>Remover</button>
+            {compras}
+            <button onClick={() => remover(index)}>Remover</button>
+            <br></br>
+            <button onClick={alternarComprados}>
+              {comprados ? "COMPRA FEITA" : "Colocar nos comprados!"}
+            </button>
           </li>
         ))}
       </ul>
     </div>
   );
 }
-export default Personagens;
+
+export default Compras;
