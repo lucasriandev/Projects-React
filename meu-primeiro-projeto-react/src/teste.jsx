@@ -1,60 +1,66 @@
 import { useState, useEffect } from "react";
 
-function Compras() {
-  const [compras, setCompras] = useState(() => {
-    return JSON.parse(localStorage.getItem("Compras")) || [];
+function Trabalhos() {
+  const [trabalhos, setTrabalhos] = useState(() => {
+    return JSON.parse(localStorage.getItem("Trabalhos")) || [];
   });
 
-  const [comprados, setComprados] = useState(false);
-
-  const [novaCompra, setNovaCompra] = useState("");
+  const [trabalhosNovos, setTrabalhosNovos] = useState("");
 
   useEffect(() => {
-    localStorage.setItem("Compras", JSON.stringify(compras));
-  }, [compras]);
+    localStorage.setItem("Trabalhos", JSON.stringify(trabalhos));
+  }, [trabalhos]);
 
   function input(event) {
-    setNovaCompra(event.target.value);
+    setTrabalhosNovos(event.target.value);
   }
 
   function add() {
-    if (novaCompra !== "") {
-      setCompras([...compras, novaCompra]);
-      setNovaCompra("");
+    if (trabalhosNovos !== "") {
+      setTrabalhos([...trabalhos, { nome: trabalhosNovos, feito: false }]);
+      setTrabalhosNovos("");
     }
   }
 
-  function alternarComprados() {
-    setComprados(!comprados);
+  function alternarFeitos(indexClicado) {
+    const novaLista = trabalhos.map((item, index) => {
+      if (index === indexClicado) {
+        return {
+          ...item,
+          feito: !item.feito,
+        };
+      }
+      return item;
+    });
+    setTrabalhos(novaLista);
   }
 
   function remover(indexRemove) {
-    const novaLista = compras.filter((item, index) => index !== indexRemove);
-    setCompras(novaLista);
-
-    if (novaLista.length === 0) {
-      localStorage.removeItem("Compras");
+    const listaNova = trabalhos.filter((item, index) => index !== indexRemove);
+    setTrabalhos(listaNova);
+    if (listaNova.length === 0) {
+      localStorage.removeItem("Trabalhos");
     }
   }
 
   return (
     <div>
-      <h1>Compras do mes!</h1>
+      <h1>Trabalhos de aulas!</h1>
       <input
         type="text"
-        value={novaCompra}
+        value={trabalhosNovos}
         onChange={input}
-        placeholder="Digite!"
+        placeholder="Digite seu trabalho!"
       />
-      <button onClick={add}>Adicionar</button>
+      <button onClick={add}>Adicionar: </button>
+
       <ul>
-        {compras.map((compras, index) => (
+        {trabalhos.map((trabalhos, index) => (
           <li key={index}>
-            {compras}
-            <button onClick={() => remover(index)}>Remover</button>
-            <br></br>
-            <button onClick={alternarComprados}>
-              {comprados ? "COMPRA FEITA" : "Colocar nos comprados!"}
+            {trabalhos.nome}
+            <button onClick={() => remover(index)}>Apagar</button>
+            <button onClick={() => alternarFeitos(index)}>
+              {trabalhos.feito ? "TRABALHO FEITO" : "PENDENTE"}
             </button>
           </li>
         ))}
@@ -63,4 +69,4 @@ function Compras() {
   );
 }
 
-export default Compras;
+export default Trabalhos;
