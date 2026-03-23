@@ -1,82 +1,58 @@
 import { useState, useEffect } from "react";
 
-function App() {
-  const [tarefas, setTarefas] = useState([]);
-  //sera usado sempre que for mexer na lista
-  const [novaTarefa, setNovaTarefa] = useState("");
-  //sera usado sempre que usuario digitar
+function MeuPerfil() {
+  const [usuario, setUsuario] = useState(null);
+  const [carregando, setCarregando] = useState(true);
 
   useEffect(() => {
-    const tarefasSalvas = localStorage.getItem("MinhasTarefas");
-
-    if (tarefasSalvas) {
-      setTarefas(JSON.parse(tarefasSalvas));
-    }
+    fetch("https://api.github.com/users/lucasriandev")
+      .then((resposta) => resposta.json())
+      .then((dados) => {
+        console.log(dados);
+        setUsuario(dados);
+        setCarregando(false);
+      })
+      .catch((erro) => {
+        console.error("Deu ruim aqui", erro);
+        setCarregando(false);
+      });
   }, []);
 
-  useEffect(() => {
-    if (tarefas.length > 0) {
-      localStorage.setItem("MinhasTarefas", JSON.stringify(tarefas));
-    }
-  }, [tarefas]);
-
-  // 2. O Catcher (Captura o que é digitado)
-  function lidarComMudanca(evento) {
-    setNovaTarefa(evento.target.value);
+  if (carregando) {
+    return <h2>Buscando dados no servidor!</h2>;
   }
 
-  // 3. CREATE (O "C" do CRUD)
-  function adicionarTarefa() {
-    if (novaTarefa !== "") {
-      // Pega a lista antiga (...tarefas), adiciona a novaTarefa no final
-      setTarefas([...tarefas, novaTarefa]);
-      setNovaTarefa(""); // Limpa o campo
-    }
+  if (!usuario) {
+    return <h2>Nao foi possivel carregar perfil!</h2>;
   }
 
-  // 4. DELETE (O "D" do CRUD)
-  function removerTarefa(indexRemover) {
-    // O filter varre a lista. Chamamos o item individual de 'tarefa' (singular)
-    const listaAtualizada = tarefas.filter(
-      (tarefa, indexAtual) => indexAtual !== indexRemover,
-    );
-    setTarefas(listaAtualizada);
-
-    if (listaAtualizada.length === 0) {
-      localStorage.removeItem("MinhasTarefas");
-    }
-  }
-
-  // 5. READ (O "R" do CRUD) - Renderizando na tela
   return (
-    <div>
-      <h1>Minhas Tarefas do Dia</h1>
-      <hr />
-
-      <input
-        type="text"
-        placeholder="O que precisa ser feito?"
-        value={novaTarefa}
-        onChange={lidarComMudanca}
+    <div
+      style={{
+        border: "1px solid #ccc",
+        padding: "20px",
+        borderRadius: "8px",
+        maxWidth: "300px",
+      }}
+    >
+      <img
+        src={usuario.avatar_url}
+        alt="Foto de perfil"
+        style={{ width: "100%", borderRadius: "50%" }}
       />
-      <button onClick={adicionarTarefa}>Adicionar</button>
 
-      <ul>
-        {/* Usamos o map na lista (plural) e chamamos cada item de 'tarefa' (singular) */}
-        {tarefas.map((tarefa, index) => (
-          <li key={index}>
-            {tarefa}
-            <button
-              onClick={() => removerTarefa(index)}
-              style={{ marginLeft: "10px" }}
-            >
-              Excluir
-            </button>
-          </li>
-        ))}
-      </ul>
+      <h2>{usuario.name || usuario.login}</h2>
+      <p>{usuario.bio}</p>
+
+      <hr />
+      <p>
+        <strong>Repositorios publicos</strong> {usuario.public_repos}
+      </p>
+      <p>
+        Seguidores<strong>{usuario.followers}</strong>
+      </p>
     </div>
   );
 }
 
-export default App;
+export default MeuPerfil;
