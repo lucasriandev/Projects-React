@@ -1,58 +1,36 @@
 import { useState, useEffect } from "react";
 
-function Personagens() {
-  const [personagem, setPersonagem] = useState(() => {
-    return JSON.parse(localStorage.getItem("Favorito")) || [];
-  });
-
-  const [novoPersonagem, setNovoPersonagem] = useState("");
+function Api() {
+  const [conselho, setConselho] = useState(null);
+  const [carregando, setCarregando] = useState(true);
 
   useEffect(() => {
-    localStorage.setItem("Favorito", JSON.stringify(personagem));
-  }, [personagem]);
+    fetch("https://api.adviceslip.com/advice")
+      .then((resposta) => resposta.json())
+      .then((dados) => {
+        console.log(dados);
+        setConselho(dados);
+        setCarregando(false);
+      })
+      .catch((error) => {
+        console.error("Deu ruim aqui");
+        setCarregando(false);
+      });
+  }, []);
 
-  function input(event) {
-    setNovoPersonagem(event.target.value);
+  if (carregando) {
+    return <h2>Buscando dados na api!</h2>;
   }
 
-  function add() {
-    if (novoPersonagem !== "") {
-      setPersonagem([...personagem, novoPersonagem]);
-      setNovoPersonagem("");
-    }
-  }
-
-  function remover(indexRemove) {
-    const novaLista = personagem.filter(
-      (person, index) => index !== indexRemove,
-    );
-    setPersonagem(novaLista);
-    if (novaLista.length === 0) {
-      localStorage.removeItem("Favorito");
-    }
+  if (!conselho) {
+    return <h2>Não foi possivel carregar perfil!</h2>;
   }
 
   return (
     <div>
-      <h1>Personagens favoritos</h1>
-      <input
-        type="text"
-        value={novoPersonagem}
-        onChange={input}
-        placeholder="Digite"
-      />
-      <button onClick={add}>Adicionar</button>
-
-      <ul>
-        {personagem.map((item, index) => (
-          <li key={index}>
-            {item}
-            <button onClick={() => remover(index)}>REMOVER</button>
-          </li>
-        ))}
-      </ul>
+      <h1>{conselho.slip.advice}</h1>
     </div>
   );
 }
 
-export default Personagens;
+export default Api;
