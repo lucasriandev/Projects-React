@@ -1,34 +1,39 @@
 import { useState, useEffect } from "react";
 
 function Api() {
-  const [conselho, setConselho] = useState(null);
+  const [user, setUser] = useState(null);
   const [carregando, setCarregando] = useState(true);
 
   useEffect(() => {
-    fetch("https://api.adviceslip.com/advice")
+    fetch("https://jsonplaceholder.typicode.com/users")
       .then((resposta) => resposta.json())
       .then((dados) => {
         console.log(dados);
-        setConselho(dados);
+        setUser(dados);
         setCarregando(false);
       })
       .catch((error) => {
-        console.error("Deu ruim aqui");
+        console.log(error);
         setCarregando(false);
       });
   }, []);
 
   if (carregando) {
-    return <h2>Buscando dados na api!</h2>;
+    return <h2>Buscando dados</h2>;
   }
 
-  if (!conselho) {
-    return <h2>Não foi possivel carregar perfil!</h2>;
+  if (!user) {
+    return <h2>Não encontrado!</h2>;
   }
 
   return (
     <div>
-      <h1>{conselho.slip.advice}</h1>
+      <h1>Usuarios</h1>
+      <ul>
+        {user.map((item, index) => (
+          <li key={index}>{item.name}</li>
+        ))}
+      </ul>
     </div>
   );
 }
