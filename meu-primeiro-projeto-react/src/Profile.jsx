@@ -15,10 +15,6 @@ function Profile(props) {
     setFavorito(!favorito);
   }
 
-  function mudarStatus(evento) {
-    setStatus(evento.target.value);
-  }
-
   return (
     <div className="profile-card">
       <h2>{props.nome}</h2>
@@ -31,7 +27,7 @@ function Profile(props) {
         type="text"
         placeholder="O que você está fazendo?"
         //onChamge que chama a funcao
-        onChange={mudarStatus}
+        onChange={(e) => setStatus(e.target.value)}
       />
 
       <p>❤️ Curtidas: {curtidas}</p>
