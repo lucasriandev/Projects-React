@@ -1,39 +1,36 @@
 import { useState, useEffect } from "react";
 
 function Api() {
-  const [user, setUser] = useState(null);
-  const [carregando, setCarregando] = useState(true);
+  const [input, setInput] = useState("");
+  const [busca, setBusca] = useState("");
+  const [usuario, setUsuario] = useState(null);
 
   useEffect(() => {
-    fetch("https://jsonplaceholder.typicode.com/users")
-      .then((resposta) => resposta.json())
-      .then((dados) => {
-        console.log(dados);
-        setUser(dados);
-        setCarregando(false);
-      })
-      .catch((error) => {
-        console.log(error);
-        setCarregando(false);
-      });
-  }, []);
+    if (busca === "") return;
 
-  if (carregando) {
-    return <h2>Buscando dados</h2>;
-  }
-
-  if (!user) {
-    return <h2>Não encontrado!</h2>;
-  }
+    fetch(`https://viacep.com.br/ws/${busca}/json/`)
+      .then((res) => res.json())
+      .then((dados) => setUsuario(dados));
+  }, [busca]);
 
   return (
     <div>
-      <h1>Usuarios</h1>
-      <ul>
-        {user.map((item, index) => (
-          <li key={index}>{item.name}</li>
-        ))}
-      </ul>
+      <h1>CEP</h1>
+      <input
+        type="text"
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+      />
+      <button onClick={() => setBusca(input)}>Busca</button>
+
+      {usuario && (
+        <div>
+          <p>Rua: {usuario.logradouro}</p>
+          <p>Bairro: {usuario.bairro}</p>
+          <p>Cidade: {usuario.localidade}</p>
+          <p>Estado: {usuario.uf}</p>
+        </div>
+      )}
     </div>
   );
 }
