@@ -1,58 +1,31 @@
-import { useState, useEffect } from "react";
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 
-function MeuPerfil() {
-  const [usuario, setUsuario] = useState(null);
-  const [carregando, setCarregando] = useState(true);
+import Home from "./Home";
+import Sobre from "./Sobre";
+import Api from "./teste";
 
-  useEffect(() => {
-    fetch("https://api.github.com/users/lucasriandev")
-      .then((resposta) => resposta.json())
-      .then((dados) => {
-        console.log(dados);
-        setUsuario(dados);
-        setCarregando(false);
-      })
-      .catch((erro) => {
-        console.error("Deu ruim aqui", erro);
-        setCarregando(false);
-      });
-  }, []);
-
-  if (carregando) {
-    return <h2>Buscando dados no servidor!</h2>;
-  }
-
-  if (!usuario) {
-    return <h2>Nao foi possivel carregar perfil!</h2>;
-  }
-
+function App() {
   return (
-    <div
-      style={{
-        border: "1px solid #ccc",
-        padding: "20px",
-        borderRadius: "8px",
-        maxWidth: "300px",
-      }}
-    >
-      <img
-        src={usuario.avatar_url}
-        alt="Foto de perfil"
-        style={{ width: "100%", borderRadius: "50%" }}
-      />
-
-      <h2>{usuario.name || usuario.login}</h2>
-      <p>{usuario.bio}</p>
+    <BrowserRouter>
+      <nav style={{ padding: "10px", backgroundColor: "#333", color: "white" }}>
+        <Link to="/" style={{ color: "white", marginRight: "15px" }}>
+          Início
+        </Link>
+        <Link to="/sobre" style={{ color: "white" }}>
+          Sobre o Projeto
+        </Link>
+        <Link to="/api"> Buscando api</Link>
+      </nav>
 
       <hr />
-      <p>
-        <strong>Repositorios publicos</strong> {usuario.public_repos}
-      </p>
-      <p>
-        Seguidores<strong>{usuario.followers}</strong>
-      </p>
-    </div>
+
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/sobre" element={<Sobre />} />
+        <Route path="/api" element={<Api />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
-export default MeuPerfil;
+export default App;
