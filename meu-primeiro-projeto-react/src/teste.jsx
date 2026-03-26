@@ -1,36 +1,39 @@
 import { useState, useEffect } from "react";
 
 function Api() {
+  const [usuario, setUsuario] = useState([]);
   const [input, setInput] = useState("");
   const [busca, setBusca] = useState("");
-  const [usuario, setUsuario] = useState(null);
 
   useEffect(() => {
     if (busca === "") return;
-
-    fetch(`https://viacep.com.br/ws/${busca}/json/`)
+    fetch(`https://api.tvmaze.com/search/shows?q=${busca}`)
       .then((res) => res.json())
-      .then((dados) => setUsuario(dados));
+      .then((dados) => {
+        console.log(dados);
+        setUsuario(dados);
+      })
+      .catch((Error) => {
+        console.log(Error, "errooooo");
+      });
   }, [busca]);
 
   return (
     <div>
-      <h1>CEP</h1>
+      <h1>Heroi</h1>
       <input
         type="text"
         value={input}
         onChange={(e) => setInput(e.target.value)}
+        placeholder="Digite"
       />
-      <button onClick={() => setBusca(input)}>Busca</button>
 
-      {usuario && (
-        <div>
-          <p>Rua: {usuario.logradouro}</p>
-          <p>Bairro: {usuario.bairro}</p>
-          <p>Cidade: {usuario.localidade}</p>
-          <p>Estado: {usuario.uf}</p>
-        </div>
-      )}
+      <button onClick={() => setBusca(input)}>Buscar</button>
+      <ul>
+        {usuario.map((item, index) => (
+          <li key={index}>{item.show.name}</li>
+        ))}
+      </ul>
     </div>
   );
 }
