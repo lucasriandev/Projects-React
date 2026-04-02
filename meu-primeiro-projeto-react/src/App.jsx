@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import Home from "./Home";
 import Crud from "./Sobre";
 import Api from "./teste";
+import Detalhes from "./detalhe";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/sobre" element={<Crud />} />
+        <Route path="/filme/:id" element={<Detalhes />} />
         <Route path="/api" element={<Api />} />
       </Routes>
     </BrowserRouter>
