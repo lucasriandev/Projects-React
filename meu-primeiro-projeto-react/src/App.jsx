@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 
 import Home from "./Home";
-import Sobre from "./Sobre";
+import Crud from "./Sobre";
 import Api from "./teste";
 
 function App() {
@@ -21,7 +21,7 @@ function App() {
 
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/sobre" element={<Sobre />} />
+        <Route path="/sobre" element={<Crud />} />
         <Route path="/api" element={<Api />} />
       </Routes>
     </BrowserRouter>
