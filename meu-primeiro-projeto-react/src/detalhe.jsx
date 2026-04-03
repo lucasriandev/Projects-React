@@ -1,43 +1,34 @@
 import { useParams, Link } from "react-router-dom";
-import { useState, useEffect } from "react"; // Não esqueça de importar os Hooks!
+import { useState, useEffect } from "react";
 
 function Detalhes() {
-  // 1. Pegamos o ID que está na URL
   const { id } = useParams();
 
-  // 2. Preparamos a memória para guardar os dados da série e o "carregando"
   const [serie, setSerie] = useState(null);
   const [carregando, setCarregando] = useState(true);
 
-  // 3. O nosso "Vigia" que vai na internet buscar os dados
   useEffect(() => {
-    // Veja que legal: nós colamos o {id} da URL no final do endereço da API!
     fetch(`https://api.tvmaze.com/shows/${id}`)
       .then((resposta) => resposta.json())
       .then((dados) => {
-        setSerie(dados); // Guarda a série na memória
-        setCarregando(false); // Avisa que terminou de carregar
+        console.log(dados);
+        setSerie(dados);
+        setCarregando(false);
       })
       .catch((erro) => console.error("Erro ao buscar:", erro));
-  }, [id]); // <-- Colocamos o id aqui para o React buscar de novo se a URL mudar
+  }, [id]);
 
-  // 4. A TELA
-
-  // Se ainda estiver buscando na internet, mostra isso:
   if (carregando) {
     return <h2>Buscando a fita na locadora... ⏳</h2>;
   }
 
-  // Se já carregou, o React desenha a página com as informações reais!
   return (
     <div style={{ padding: "20px", fontFamily: "sans-serif" }}>
       <h2>🍿 Detalhes da Série</h2>
       <hr />
 
-      {/* Aqui usamos os dados que vieram do servidor (serie.name, serie.image.medium, etc) */}
       <h3>{serie.name}</h3>
 
-      {/* O TVMaze manda a foto dentro de image.medium */}
       {serie.image && (
         <img
           src={serie.image.medium}
