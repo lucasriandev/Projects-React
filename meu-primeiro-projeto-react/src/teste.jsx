@@ -6,43 +6,37 @@
 import { useState, useEffect } from "react";
 
 function Api() {
-  const [busca, setBusca] = useState("");
+  const [cep, setCep] = useState(null);
   const [input, setInput] = useState("");
-  const [user, setUser] = useState(null);
+  const [busca, setBusca] = useState("");
 
   useEffect(() => {
     if (busca === "") return;
-    fetch(`https://pokeapi.co/api/v2/pokemon/${busca}`)
-      .then((resposta) => resposta.json())
-      .then((dados) => {
-        console.log(dados);
-        setUser(dados);
+
+    fetch(`https://viacep.com.br/ws/${busca}/json/`)
+      .then((r) => r.json())
+      .then((d) => {
+        console.log(d);
+        setCep(d);
         setInput("");
       })
       .catch((error) => {
-        console.log("Deu erro", error);
+        console.log(error);
       });
   }, [busca]);
 
   return (
     <div>
-      <h1>Api</h1>
+      <h1>Cep</h1>
       <input
         type="text"
-        placeholder="Digite seu pokemon"
         value={input}
+        placeholder="Digite"
         onChange={(e) => setInput(e.target.value)}
       />
       <button onClick={() => setBusca(input)}>Buscar</button>
 
-      {user && (
-        <div>
-          <h2>{user.name}</h2>
-          <p>Altura: {user.height}</p>
-          <p>Peso: {user.weight}</p>
-          <img src={user.sprites.front_default} />
-        </div>
-      )}
+      <ul>{cep && <h1>Bairro: {cep.bairro}</h1>}</ul>
     </div>
   );
 }
