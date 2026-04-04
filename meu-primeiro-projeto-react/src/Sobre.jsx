@@ -2,45 +2,57 @@ import { useEffect, useState } from "react";
 
 function Crud() {
   const [usuario, setUsuario] = useState(() => {
-    return JSON.parse(localStorage.getItem("usuarios")) || [];
+    return JSON.parse(localStorage.getItem("usuario")) || [];
   });
 
-  const [novoUser, setNovoUser] = useState("");
+  const [novoUsuario, setNovoUsuario] = useState("");
 
   useEffect(() => {
-    localStorage.setItem("usuarios", JSON.stringify(usuario));
+    localStorage.setItem("usuario", JSON.stringify(usuario));
   }, [usuario]);
 
   function add() {
-    if (novoUser !== "") {
-      setUsuario([...usuario, novoUser]);
-      setNovoUser("");
+    if (novoUsuario !== "") {
+      setUsuario([...usuario, novoUsuario]);
+      setNovoUsuario("");
     }
   }
 
-  function remover(indexRemover) {
-    const novaLista = usuario.filter((t, index) => index !== indexRemover);
-    setUsuario(novaLista);
-    if (novaLista.length === 0) {
-      localStorage.removeItem("usuarios");
+  function remover(indexApagar) {
+    const novoLista = usuario.filter((user, index) => index !== indexApagar);
+    setUsuario(novoLista);
+    if (novoLista.length === 0) {
+      localStorage.removeItem("usuario");
     }
   }
 
   return (
     <div>
-      <h1>Usuarios</h1>
+      <h1>Cadastro de usuarios!</h1>
       <input
-        placeholder="digite"
         type="text"
-        value={novoUser}
-        onChange={(e) => setNovoUser(e.target.value)}
+        value={novoUsuario}
+        placeholder="Digite o usuario"
+        onChange={(e) => setNovoUsuario(e.target.value)}
       />
-      <button onClick={add}>Cadastrar</button>
+      <button style={{ background: "green", marginLeft: "10px" }} onClick={add}>
+        Cadastrar
+      </button>
+
       <ul>
         {usuario.map((item, index) => (
           <li key={index}>
             {item}
-            <button onClick={() => remover(index)}>🗑️</button>
+            <button
+              style={{
+                background: "red",
+                marginLeft: "10px",
+                marginTop: "10px",
+              }}
+              onClick={() => remover(index)}
+            >
+              Remover
+            </button>
           </li>
         ))}
       </ul>
