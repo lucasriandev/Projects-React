@@ -17,7 +17,7 @@ function App() {
         <Route path="/" element={<Rota />} />
         <Route path="/Api" element={<Api />} />
         <Route path="/Crud" element={<Crud />} />
-        <Route path="/dinamica/:id" element={<Dinamica />} />
+        <Route path="/filme/:id" element={<Dinamica />} />
       </Routes>
     </BrowserRouter>
   );
