@@ -9,6 +9,7 @@ function Dinamica() {
     fetch(`https://api.tvmaze.com/shows/${id}`)
       .then((resposta) => resposta.json())
       .then((dados) => {
+        console.log(dados);
         setDados(dados);
       })
       .catch((erro) => {

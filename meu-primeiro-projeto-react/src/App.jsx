@@ -8,9 +8,42 @@ function App() {
   return (
     <BrowserRouter>
       <nav>
-        <Link to="/">Inicio</Link>
-        <Link to="/Api"> Api</Link>
-        <Link to="/Crud"> Crud</Link>
+        <Link
+          to="/"
+          style={{
+            background: "red",
+            color: "white",
+            padding: "10px",
+            borderRadius: "10px",
+          }}
+        >
+          Inicio
+        </Link>
+        <Link
+          to="/Api"
+          style={{
+            background: "green",
+            color: "white",
+            padding: "10px",
+            borderRadius: "10px",
+            margin: "5px",
+          }}
+        >
+          {" "}
+          Api
+        </Link>
+        <Link
+          to="/Crud"
+          style={{
+            background: "yellow",
+            color: "black",
+            padding: "10px",
+            borderRadius: "10px",
+          }}
+        >
+          {" "}
+          Crud
+        </Link>
       </nav>
 
       <Routes>
