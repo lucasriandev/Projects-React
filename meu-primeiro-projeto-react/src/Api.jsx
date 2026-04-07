@@ -1,36 +1,46 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 function Api() {
-  const [user, setUser] = useState(null);
+  const [listaSeries, setSeries] = useState([]);
   const [input, setInput] = useState("");
   const [busca, setBusca] = useState("");
 
   useEffect(() => {
     if (busca === "") return;
 
-    fetch(`https://api.tvmaze.com/shows/${busca}`)
+    fetch(`https://api.tvmaze.com/search/shows?q=${busca}`)
       .then((resposta) => resposta.json())
       .then((dados) => {
         console.log(dados);
-        setUser(dados);
+        setSeries(dados);
         setInput("");
       })
-      .catch((erro) => {
-        console.log("Algo está errado", erro);
+      .catch((error) => {
+        console.log("erroooo", error);
       });
   }, [busca]);
 
   return (
     <div>
-      <h1>Buscar api</h1>
+      <h1>Buscador de Cinematch</h1>
       <input
         type="text"
-        placeholder="Digite o filme"
+        placeholder="Digite"
         value={input}
         onChange={(e) => setInput(e.target.value)}
       />
       <button onClick={() => setBusca(input)}>Buscar</button>
-      <ul>{user && <h3>{user.name}</h3>}</ul>
+      <br />
+      <br />
+
+      <ul>
+        {listaSeries.map((item, index) => (
+          <li key={index} style={{ marginBottom: "15px" }}>
+            <Link to={`/filme/${item.show.id}`}>{item.show.name}</Link>{" "}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }

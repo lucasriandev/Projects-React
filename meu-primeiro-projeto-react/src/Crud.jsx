@@ -1,4 +1,4 @@
-import { useState, useEffect, Link } from "react";
+import { useState, useEffect } from "react";
 
 function Crud() {
   const [usuarios, setUsuarios] = useState(() => {

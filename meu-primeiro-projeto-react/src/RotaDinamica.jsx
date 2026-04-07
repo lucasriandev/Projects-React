@@ -24,7 +24,7 @@ function Dinamica() {
       <h1>{dados.name}</h1>
       <img src={dados.image.medium} />
       <br />
-      <Link to="/">Voltar</Link>
+      <Link to="/Api">Voltar</Link>
     </div>
   );
 }
