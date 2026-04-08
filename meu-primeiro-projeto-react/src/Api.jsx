@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import CardSerie from "./CardSerie";
 
 function Api() {
-  const [listaSeries, setSeries] = useState([]);
+  const [listaSeries, setListaSeries] = useState([]);
   const [input, setInput] = useState("");
   const [busca, setBusca] = useState("");
 
@@ -12,33 +12,39 @@ function Api() {
     fetch(`https://api.tvmaze.com/search/shows?q=${busca}`)
       .then((resposta) => resposta.json())
       .then((dados) => {
-        console.log(dados);
-        setSeries(dados);
+        setListaSeries(dados);
         setInput("");
       })
-      .catch((error) => {
-        console.log("erroooo", error);
+      .catch((erro) => {
+        console.log(erro, "erroooo");
       });
   }, [busca]);
 
   return (
-    <div>
-      <h1>Buscador de Cinematch</h1>
+    <div style={{ padding: "20px" }}>
+      <h1>Buscador Cinematch</h1>
       <input
         type="text"
-        placeholder="Digite"
         value={input}
+        placeholder="Digite"
+        style={{ padding: "8px" }}
         onChange={(e) => setInput(e.target.value)}
       />
-      <button onClick={() => setBusca(input)}>Buscar</button>
-      <br />
-      <br />
+      <button
+        onClick={() => setBusca(input)}
+        style={{ padding: "8px", marginLeft: "5px" }}
+      >
+        Buscar
+      </button>
 
-      <ul>
+      <br />
+      <ul style={{ padding: 0 }}>
         {listaSeries.map((item, index) => (
-          <li key={index} style={{ marginBottom: "15px" }}>
-            <Link to={`/filme/${item.show.id}`}>{item.show.name}</Link>{" "}
-          </li>
+          <CardSerie
+            key={index}
+            idDaSerie={item.show.id}
+            nomeDaSerie={item.show.name}
+          />
         ))}
       </ul>
     </div>
