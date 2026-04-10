@@ -22,6 +22,7 @@ function Dinamica() {
   return (
     <div>
       <h1>{dados.name}</h1>
+      <p>{dados.genres}</p>
       <img src={dados.image.medium} />
       <br />
       <Link to="/Api">Voltar</Link>

@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-function CardSerie({ idDaSerie, nomeDaSerie }) {
+function CardSerie({ idDaSerie, nomeDaSerie, nota }) {
   return (
     <li
       style={{
@@ -21,6 +21,7 @@ function CardSerie({ idDaSerie, nomeDaSerie }) {
         }}
       >
         🎬{nomeDaSerie}
+        <br></br>⭐{nota}
       </Link>
     </li>
   );
