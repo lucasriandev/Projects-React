@@ -1,54 +1,48 @@
 import { useState, useEffect } from "react";
+import Lista from "./lista";
 
 function Crud() {
-  const [usuarios, setUsuarios] = useState(() => {
-    return JSON.parse(localStorage.getItem("User")) || [];
+  const [personagem, setPersonagem] = useState(() => {
+    return JSON.parse(localStorage.getItem("personagem")) || [];
   });
 
-  const [novoUsuario, setNovoUsuario] = useState("");
+  const [novoPersonagem, setNovoPersonagem] = useState("");
 
-  useEffect(() => {
-    localStorage.setItem("User", JSON.stringify(usuarios));
-  }, [usuarios]);
+  useEffect(
+    () => localStorage.setItem("personagem", JSON.stringify(personagem)),
+    [personagem],
+  );
 
   function add() {
-    if (novoUsuario !== "") {
-      setUsuarios([...usuarios, novoUsuario]);
-      setNovoUsuario("");
+    if (novoPersonagem !== "") {
+      setPersonagem([...personagem, novoPersonagem]);
+      setNovoPersonagem("");
     }
   }
 
   function remover(indexRemover) {
-    const novaLista = usuarios.filter((i, index) => index !== indexRemover);
-    setUsuarios(novaLista);
+    const novaLista = personagem.filter((i, index) => index !== indexRemover);
+    setPersonagem(novaLista);
     if (novaLista.length === 0) {
-      localStorage.removeItem("User");
+      localStorage.removeItem("personagem");
     }
   }
 
   return (
     <div>
-      <h1>Cadastro de usuarios!</h1>
+      <h1>Cadastre seus personagens!</h1>
       <input
         type="text"
-        value={novoUsuario}
-        placeholder="Digite o nome!"
-        onChange={(e) => setNovoUsuario(e.target.value)}
+        placeholder="Digite"
+        value={novoPersonagem}
+        onChange={(e) => setNovoPersonagem(e.target.value)}
       />
 
-      <button onClick={add}>Adicionar</button>
+      <button onClick={add}>Cadastrar</button>
 
-      <ul>
-        {usuarios.map((item, index) => {
-          return (
-            <li key={index}>
-              {item}
-              <button onClick={() => remover(index)}>🗑️</button>
-            </li>
-          );
-        })}
-      </ul>
+      <Lista personagem={personagem} remover={remover}></Lista>
     </div>
   );
 }
+
 export default Crud;
