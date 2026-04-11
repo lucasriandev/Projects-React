@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import Lista from "./lista";
 
 function Crud() {
   const [personagem, setPersonagem] = useState(() => {
@@ -39,8 +38,6 @@ function Crud() {
       />
 
       <button onClick={add}>Cadastrar</button>
-
-      <Lista personagem={personagem} remover={remover}></Lista>
     </div>
   );
 }
