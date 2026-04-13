@@ -3,6 +3,7 @@ import Api from "./Api";
 import Rota from "./Rota";
 import Crud from "./Crud";
 import Dinamica from "./RotaDinamica";
+import ApiPokemon from "./Api2";
 
 function App() {
   return (
@@ -44,12 +45,25 @@ function App() {
           {" "}
           Crud
         </Link>
+        <Link
+          to="/Api2"
+          style={{
+            background: "blue",
+            color: "white",
+            padding: "10px",
+            marginLeft: "5px",
+            borderRadius: "10px",
+          }}
+        >
+          ApiPokemon
+        </Link>
       </nav>
 
       <Routes>
         <Route path="/" element={<Rota />} />
         <Route path="/Api" element={<Api />} />
         <Route path="/Crud" element={<Crud />} />
+        <Route path="/Api2" element={<ApiPokemon />} />
         <Route path="/filme/:id" element={<Dinamica />} />
       </Routes>
     </BrowserRouter>

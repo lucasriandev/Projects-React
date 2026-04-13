@@ -38,6 +38,14 @@ function Crud() {
       />
 
       <button onClick={add}>Cadastrar</button>
+      <ul>
+        {personagem.map((item, index) => (
+          <li key={index}>
+            {item}
+            <button onClick={() => remover(index)}>🗑️</button>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
