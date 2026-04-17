@@ -1,50 +1,50 @@
 import { useState, useEffect } from "react";
 
 function Crud() {
-  const [personagem, setPersonagem] = useState(() => {
-    return JSON.parse(localStorage.getItem("personagem")) || [];
+  const [lutador, setLutador] = useState(() => {
+    return JSON.parse(localStorage.getItem("lutador")) || [];
   });
 
-  const [novoPersonagem, setNovoPersonagem] = useState("");
+  const [novoLutador, setNovoLutador] = useState("");
 
-  useEffect(
-    () => localStorage.setItem("personagem", JSON.stringify(personagem)),
-    [personagem],
-  );
+  useEffect(() => {
+    localStorage.setItem("lutador", JSON.stringify(lutador));
+  }, [lutador]);
 
   function add() {
-    if (novoPersonagem !== "") {
-      setPersonagem([...personagem, novoPersonagem]);
-      setNovoPersonagem("");
+    if (novoLutador !== "") {
+      setLutador([...lutador, novoLutador]);
+      setNovoLutador("");
     }
   }
 
   function remover(indexRemover) {
-    const novaLista = personagem.filter((i, index) => index !== indexRemover);
-    setPersonagem(novaLista);
+    const novaLista = lutador.filter((t, index) => index !== indexRemover);
+    setLutador(novaLista);
     if (novaLista.length === 0) {
-      localStorage.removeItem("personagem");
+      localStorage.removeItem("lutador");
     }
   }
 
   return (
     <div>
-      <h1>Cadastre seus personagens!</h1>
+      <h1>Lutadores do UFC!</h1>
       <input
         type="text"
-        placeholder="Digite"
-        value={novoPersonagem}
-        onChange={(e) => setNovoPersonagem(e.target.value)}
+        value={novoLutador}
+        onChange={(e) => setNovoLutador(e.target.value)}
+        placeholder="Digite seu lutador!"
       />
-
       <button onClick={add}>Cadastrar</button>
       <ul>
-        {personagem.map((item, index) => (
-          <li key={index}>
-            {item}
-            <button onClick={() => remover(index)}>🗑️</button>
-          </li>
-        ))}
+        {lutador.map((item, index) => {
+          return (
+            <li key={index}>
+              {item}
+              <button onClick={() => remover(index)}>🗑️</button>
+            </li>
+          );
+        })}
       </ul>
     </div>
   );
