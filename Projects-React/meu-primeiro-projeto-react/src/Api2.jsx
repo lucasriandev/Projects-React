@@ -1,40 +1,34 @@
 import { useState, useEffect } from "react";
 
 function ApiPokemon() {
-  const [busca, setBusca] = useState("");
-  const [pokemons, setPokemons] = useState(null);
-  const [input, setInput] = useState("");
+  const [usuarios, setUsuarios] = useState([]);
+  const [carregando, setCarregando] = useState(false);
 
   useEffect(() => {
-    if (busca === "") return;
-    fetch(`https://pokeapi.co/api/v2/pokemon/${busca}`)
+    fetch("https://jsonplaceholder.typicode.com/users")
       .then((resposta) => resposta.json())
       .then((dados) => {
         console.log(dados);
-        setPokemons(dados);
-        setInput("");
+        setUsuarios(dados);
+        setCarregando(true);
       })
       .catch((error) => {
-        console.log(error, "errooooo");
+        console.log(error);
       });
-  }, [busca]);
+  }, []);
+
+  if (carregando === false) {
+    return <h2>Buscando...</h2>;
+  }
 
   return (
     <div>
-      <h1>Ache seu pokemon!</h1>
-      <input
-        type="text"
-        placeholder="Digite seu pokemon!"
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-      />
-      <button onClick={() => setBusca(input)}>Buscar</button>
-      {pokemons && (
-        <div>
-          <h2>{pokemons.name}</h2>
-          <img src={pokemons.sprites.front_default} />
-        </div>
-      )}
+      <h1>Usuarios!</h1>
+      <ul>
+        {usuarios.map((item, index) => {
+          return <li key={index}>{item.name}</li>;
+        })}
+      </ul>
     </div>
   );
 }
