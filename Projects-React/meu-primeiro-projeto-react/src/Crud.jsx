@@ -1,50 +1,47 @@
 import { useState, useEffect } from "react";
 
 function Crud() {
-  const [lutador, setLutador] = useState(() => {
-    return JSON.parse(localStorage.getItem("lutador")) || [];
+  const [metas, setMetas] = useState(() => {
+    return JSON.parse(localStorage.getItem("metas")) || [];
   });
-
-  const [novoLutador, setNovoLutador] = useState("");
+  const [input, setInput] = useState("");
 
   useEffect(() => {
-    localStorage.setItem("lutador", JSON.stringify(lutador));
-  }, [lutador]);
+    localStorage.setItem("metas", JSON.stringify(metas));
+  }, [metas]);
 
   function add() {
-    if (novoLutador !== "") {
-      setLutador([...lutador, novoLutador]);
-      setNovoLutador("");
+    if (input !== "") {
+      setMetas([...metas, input]);
+      setInput("");
     }
   }
 
-  function remover(indexRemover) {
-    const novaLista = lutador.filter((t, index) => index !== indexRemover);
-    setLutador(novaLista);
+  function remove(indexRemover) {
+    const novaLista = metas.filter((t, index) => index !== indexRemover);
+    setMetas(novaLista);
     if (novaLista.length === 0) {
-      localStorage.removeItem("lutador");
+      localStorage.removeItem("metas");
     }
   }
 
   return (
     <div>
-      <h1>Lutadores do UFC!</h1>
+      <h1>Metas</h1>
       <input
         type="text"
-        value={novoLutador}
-        onChange={(e) => setNovoLutador(e.target.value)}
-        placeholder="Digite seu lutador!"
+        value={input}
+        placeholder="Digite a meta!"
+        onChange={(e) => setInput(e.target.value)}
       />
       <button onClick={add}>Cadastrar</button>
       <ul>
-        {lutador.map((item, index) => {
-          return (
-            <li key={index}>
-              {item}
-              <button onClick={() => remover(index)}>🗑️</button>
-            </li>
-          );
-        })}
+        {metas.map((item, index) => (
+          <li key={index}>
+            {item}
+            <button onClick={() => remove(index)}>❌</button>
+          </li>
+        ))}
       </ul>
     </div>
   );
