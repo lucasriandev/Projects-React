@@ -1,50 +1,50 @@
 import { useState, useEffect } from "react";
 
 function Crud() {
-  const [metas, setMetas] = useState(() => {
-    return JSON.parse(localStorage.getItem("metas")) || [];
+  const [dieta, setDieta] = useState(() => {
+    return JSON.parse(localStorage.getItem("comida")) || [];
   });
+
   const [input, setInput] = useState("");
 
   useEffect(() => {
-    localStorage.setItem("metas", JSON.stringify(metas));
-  }, [metas]);
+    localStorage.setItem("comida", JSON.stringify(dieta));
+  }, [dieta]);
 
   function add() {
     if (input !== "") {
-      setMetas([...metas, input]);
+      setDieta([...dieta, input]);
       setInput("");
     }
   }
 
-  function remove(indexRemover) {
-    const novaLista = metas.filter((t, index) => index !== indexRemover);
-    setMetas(novaLista);
+  function remover(indexRemover) {
+    const novaLista = dieta.filter((t, index) => index !== indexRemover);
+    setDieta(novaLista);
     if (novaLista.length === 0) {
-      localStorage.removeItem("metas");
+      localStorage.removeItem("comida");
     }
   }
 
   return (
     <div>
-      <h1>Metas</h1>
+      <h1>Oq você está comendo!</h1>
       <input
         type="text"
+        placeholder="Digite!"
         value={input}
-        placeholder="Digite a meta!"
         onChange={(e) => setInput(e.target.value)}
       />
-      <button onClick={add}>Cadastrar</button>
+      <button onClick={add}>✅</button>
       <ul>
-        {metas.map((item, index) => (
+        {dieta.map((item, index) => (
           <li key={index}>
             {item}
-            <button onClick={() => remove(index)}>❌</button>
+            <button onClick={() => remover(index)}>🗑️</button>
           </li>
         ))}
       </ul>
     </div>
   );
 }
-
 export default Crud;
