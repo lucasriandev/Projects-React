@@ -1,36 +1,37 @@
 import { useState, useEffect } from "react";
 
 function ApiPokemon() {
-  const [busca, setBusca] = useState("");
   const [input, setInput] = useState("");
-  const [ceps, setCeps] = useState("");
+  const [busca, setBusca] = useState("");
+  const [desenho, setDesenho] = useState(null);
 
   useEffect(() => {
     if (busca === "") return;
-
-    fetch(`https://viacep.com.br/ws/${busca}/json/`)
+    fetch(`https://rickandmortyapi.com/api/character/?name=${busca}`)
       .then((resposta) => resposta.json())
       .then((dados) => {
         console.log(dados);
-        setCeps(dados);
+        setDesenho(dados);
         setInput("");
       })
-      .catch((erro) => {
-        console.log(erro, "errooooo");
+      .catch((error) => {
+        console.log(error);
       });
   }, [busca]);
 
   return (
     <div>
-      <h1>Pegando cep!</h1>
+      <h1>Rick e Morty</h1>
       <input
-        type="number"
+        type="text"
         value={input}
+        placeholder="Digite"
         onChange={(e) => setInput(e.target.value)}
-        placeholder="Digite seu cep"
       />
+
       <button onClick={() => setBusca(input)}>Buscar</button>
-      <ul>{ceps && <li>{ceps.bairro}</li>}</ul>
+      {desenho &&
+        desenho.results.map((item, index) => <li key={index}>{item.name}</li>)}
     </div>
   );
 }
