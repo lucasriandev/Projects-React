@@ -1,39 +1,48 @@
 import { useState, useEffect } from "react";
 
-function ApiPokemon() {
+function LojaOnline() {
+  const [loja, setLoja] = useState([]);
   const [input, setInput] = useState("");
-  const [busca, setBusca] = useState("");
-  const [desenho, setDesenho] = useState(null);
 
   useEffect(() => {
-    if (busca === "") return;
-    fetch(`https://rickandmortyapi.com/api/character/?name=${busca}`)
+    fetch(`https://fakestoreapi.com/products`)
       .then((resposta) => resposta.json())
       .then((dados) => {
         console.log(dados);
-        setDesenho(dados);
-        setInput("");
+        setLoja(dados);
       })
-      .catch((error) => {
-        console.log(error);
+      .catch((erro) => {
+        console.log(erro);
       });
-  }, [busca]);
+  }, []);
+
+  const filtrados =
+    input === ""
+      ? loja
+      : loja.filter((item) =>
+          item.title.toLowerCase().includes(input.toLowerCase()),
+        );
 
   return (
     <div>
-      <h1>Rick e Morty</h1>
+      <h1>Loja</h1>
+
       <input
         type="text"
+        placeholder="Buscar produto..."
         value={input}
-        placeholder="Digite"
         onChange={(e) => setInput(e.target.value)}
       />
 
-      <button onClick={() => setBusca(input)}>Buscar</button>
-      {desenho &&
-        desenho.results.map((item, index) => <li key={index}>{item.name}</li>)}
+      <ul>
+        {filtrados.map((item) => (
+          <li key={item.id}>
+            {item.title} - R$ {item.price}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
 
-export default ApiPokemon;
+export default LojaOnline;

@@ -4,6 +4,7 @@ import Rota from "./Rota";
 import Crud from "./Crud";
 import Dinamica from "./RotaDinamica";
 import ApiPokemon from "./Api2";
+import LojaOnline from "./Api2";
 
 function App() {
   return (
@@ -55,7 +56,7 @@ function App() {
             borderRadius: "10px",
           }}
         >
-          ApiPokemon
+          Loja Online
         </Link>
       </nav>
 
@@ -63,7 +64,7 @@ function App() {
         <Route path="/" element={<Rota />} />
         <Route path="/Api" element={<Api />} />
         <Route path="/Crud" element={<Crud />} />
-        <Route path="/Api2" element={<ApiPokemon />} />
+        <Route path="/Api2" element={<LojaOnline />} />
         <Route path="/filme/:id" element={<Dinamica />} />
       </Routes>
     </BrowserRouter>
