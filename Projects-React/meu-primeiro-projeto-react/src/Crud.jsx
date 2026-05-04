@@ -1,50 +1,53 @@
 import { useState, useEffect } from "react";
 
 function Crud() {
-  const [dieta, setDieta] = useState(() => {
-    return JSON.parse(localStorage.getItem("comida")) || [];
+  const [individualidade, setIndividualidade] = useState(() => {
+    return JSON.parse(localStorage.getItem("indi")) || [];
   });
 
   const [input, setInput] = useState("");
 
   useEffect(() => {
-    localStorage.setItem("comida", JSON.stringify(dieta));
-  }, [dieta]);
+    localStorage.setItem("indi", JSON.stringify(individualidade));
+  }, [individualidade]);
 
   function add() {
     if (input !== "") {
-      setDieta([...dieta, input]);
+      setIndividualidade([...individualidade, input]);
       setInput("");
     }
   }
 
   function remover(indexRemover) {
-    const novaLista = dieta.filter((t, index) => index !== indexRemover);
-    setDieta(novaLista);
+    const novaLista = individualidade.filter(
+      (t, index) => index !== indexRemover,
+    );
+    setIndividualidade(novaLista);
     if (novaLista.length === 0) {
-      localStorage.removeItem("comida");
+      localStorage.removeItem("indi");
     }
   }
 
   return (
     <div>
-      <h1>Oq você está comendo!</h1>
+      <h1>Qual individualidade vc quer?</h1>
       <input
         type="text"
         placeholder="Digite!"
         value={input}
         onChange={(e) => setInput(e.target.value)}
       />
-      <button onClick={add}>✅</button>
+      <button onClick={add}>Add</button>
       <ul>
-        {dieta.map((item, index) => (
+        {individualidade.map((item, index) => (
           <li key={index}>
             {item}
-            <button onClick={() => remover(index)}>🗑️</button>
+            <button onClick={() => remover(index)}>❌</button>
           </li>
         ))}
       </ul>
     </div>
   );
 }
+
 export default Crud;
