@@ -3,7 +3,7 @@ import Api from "./Api";
 import Rota from "./Rota";
 import Crud from "./Crud";
 import Dinamica from "./RotaDinamica";
-import ApiPokemon from "./Api2";
+import ApiNome from "./Api3";
 import LojaOnline from "./Api2";
 
 function App() {
@@ -58,6 +58,18 @@ function App() {
         >
           Loja Online
         </Link>
+        <Link
+          to="/Api3"
+          style={{
+            background: "pink",
+            color: "black",
+            padding: "10px",
+            marginLeft: "5px",
+            borderRadius: "10px",
+          }}
+        >
+          ApiNome
+        </Link>
       </nav>
 
       <Routes>
@@ -65,6 +77,7 @@ function App() {
         <Route path="/Api" element={<Api />} />
         <Route path="/Crud" element={<Crud />} />
         <Route path="/Api2" element={<LojaOnline />} />
+        <Route path="/Api3" element={<ApiNome />} />
         <Route path="/filme/:id" element={<Dinamica />} />
       </Routes>
     </BrowserRouter>
