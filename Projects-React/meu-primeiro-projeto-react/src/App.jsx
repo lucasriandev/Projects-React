@@ -6,6 +6,7 @@ import Dinamica from "./RotaDinamica";
 import ApiNome from "./Api3";
 import LojaOnline from "./Api2";
 import Paises from "./Api4";
+import Receitas from "./Api5";
 
 function App() {
   return (
@@ -83,6 +84,18 @@ function App() {
         >
           Paises
         </Link>
+        <Link
+          to="/Api5"
+          style={{
+            background: "brown",
+            color: "white",
+            padding: "10px",
+            marginLeft: "5px",
+            borderRadius: "10px",
+          }}
+        >
+          Receitas
+        </Link>
       </nav>
 
       <Routes>
@@ -92,6 +105,7 @@ function App() {
         <Route path="/Api2" element={<LojaOnline />} />
         <Route path="/Api3" element={<ApiNome />} />
         <Route path="/Api4" element={<Paises />} />
+        <Route path="/Api5" element={<Receitas />} />
         <Route path="/filme/:id" element={<Dinamica />} />
       </Routes>
     </BrowserRouter>
