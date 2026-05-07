@@ -72,10 +72,10 @@ function App() {
           ApiNome
         </Link>
         <Link
-          to="/Api3"
+          to="/Api4"
           style={{
-            background: "pink",
-            color: "black",
+            background: "purple",
+            color: "white",
             padding: "10px",
             marginLeft: "5px",
             borderRadius: "10px",
