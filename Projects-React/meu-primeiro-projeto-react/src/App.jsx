@@ -5,6 +5,7 @@ import Crud from "./Crud";
 import Dinamica from "./RotaDinamica";
 import ApiNome from "./Api3";
 import LojaOnline from "./Api2";
+import Paises from "./Api4";
 
 function App() {
   return (
@@ -70,6 +71,18 @@ function App() {
         >
           ApiNome
         </Link>
+        <Link
+          to="/Api3"
+          style={{
+            background: "pink",
+            color: "black",
+            padding: "10px",
+            marginLeft: "5px",
+            borderRadius: "10px",
+          }}
+        >
+          Paises
+        </Link>
       </nav>
 
       <Routes>
@@ -78,6 +91,7 @@ function App() {
         <Route path="/Crud" element={<Crud />} />
         <Route path="/Api2" element={<LojaOnline />} />
         <Route path="/Api3" element={<ApiNome />} />
+        <Route path="/Api4" element={<Paises />} />
         <Route path="/filme/:id" element={<Dinamica />} />
       </Routes>
     </BrowserRouter>
