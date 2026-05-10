@@ -6,44 +6,40 @@ function Paises() {
 
   useEffect(() => {
     fetch("https://restcountries.com/v3.1/all?fields=name,flags,population")
-      .then((r) => r.json())
+      .then((res) => res.json())
       .then((dados) => {
         console.log(dados);
         setPaises(dados);
       })
       .catch((error) => {
-        console.log(error, "erroooo");
+        console.log(error);
       });
   }, []);
 
-  const nomesFiltrados =
+  const nomeFiltrado =
     input === ""
       ? paises
-      : paises.filter((item) => {
-          return item.name.common.toLowerCase().includes(input.toLowerCase());
-        });
+      : paises.filter((item) =>
+          item.name.common.toLowerCase().includes(input.toLowerCase()),
+        );
 
   return (
     <div>
-      <h2>Paises</h2>
+      <h2>Busque seu pais!</h2>
       <input
         type="text"
         placeholder="Digite!"
         value={input}
         onChange={(e) => setInput(e.target.value)}
       />
-
-      {nomesFiltrados.length === 0 ? (
-        <p>Nenhum pais encontrado!</p>
+      {nomeFiltrado.length === 0 ? (
+        <p>Nenhum encontrado!</p>
       ) : (
         <ul>
-          {nomesFiltrados.map((item) => (
-            <li key={item.name.common}>
+          {nomeFiltrado.map((item, index) => (
+            <li key={index}>
               <h3>{item.name.common}</h3>
-
-              <p>População: {item.population}</p>
-
-              <img src={item.flags.png} alt={item.name.common} width="120" />
+              <img src={item.flags.png} style={{ width: "100px" }} />
             </li>
           ))}
         </ul>
