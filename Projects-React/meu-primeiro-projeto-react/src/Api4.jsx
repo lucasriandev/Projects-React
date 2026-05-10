@@ -39,6 +39,7 @@ function Paises() {
           {nomeFiltrado.map((item, index) => (
             <li key={index}>
               <h3>{item.name.common}</h3>
+              <p>População total: {item.population}</p>
               <img src={item.flags.png} style={{ width: "100px" }} />
             </li>
           ))}
