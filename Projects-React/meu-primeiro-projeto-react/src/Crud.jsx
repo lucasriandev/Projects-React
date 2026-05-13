@@ -1,48 +1,60 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 function Crud() {
-  const [individualidade, setIndividualidade] = useState(() => {
-    return JSON.parse(localStorage.getItem("indi")) || [];
-  });
-
+  const [tarefas, setTarefas] = useState([]);
   const [input, setInput] = useState("");
+  const [editandoId, setEditandoId] = useState(null);
 
-  useEffect(() => {
-    localStorage.setItem("indi", JSON.stringify(individualidade));
-  }, [individualidade]);
+  function salvar() {
+    if (input === "") return;
 
-  function add() {
-    if (input !== "") {
-      setIndividualidade([...individualidade, input]);
-      setInput("");
+    if (editandoId === null) {
+      // CREATE
+      const novaTarefa = {
+        id: Date.now(),
+        texto: input,
+      };
+
+      setTarefas([...tarefas, novaTarefa]);
+    } else {
+      // UPDATE
+      const atualizadas = tarefas.map((item) =>
+        item.id === editandoId ? { ...item, texto: input } : item,
+      );
+
+      setTarefas(atualizadas);
+      setEditandoId(null);
     }
+
+    setInput("");
   }
 
-  function remover(indexRemover) {
-    const novaLista = individualidade.filter(
-      (t, index) => index !== indexRemover,
-    );
-    setIndividualidade(novaLista);
-    if (novaLista.length === 0) {
-      localStorage.removeItem("indi");
-    }
+  function editar(tarefa) {
+    setInput(tarefa.texto);
+    setEditandoId(tarefa.id);
+  }
+
+  function remover(id) {
+    const filtradas = tarefas.filter((item) => item.id !== id);
+    setTarefas(filtradas);
   }
 
   return (
     <div>
-      <h1>Qual individualidade vc quer?</h1>
-      <input
-        type="text"
-        placeholder="Digite!"
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-      />
-      <button onClick={add}>Add</button>
+      <h1>To Do ID Master</h1>
+
+      <input value={input} onChange={(e) => setInput(e.target.value)} />
+
+      <button onClick={salvar}>{editandoId ? "Atualizar" : "Adicionar"}</button>
+
       <ul>
-        {individualidade.map((item, index) => (
-          <li key={index}>
-            {item}
-            <button onClick={() => remover(index)}>❌</button>
+        {tarefas.map((item) => (
+          <li key={item.id}>
+            {item.texto}
+
+            <button onClick={() => editar(item)}>Editar</button>
+
+            <button onClick={() => remover(item.id)}>Remover</button>
           </li>
         ))}
       </ul>
