@@ -1,62 +1,73 @@
 import { useState } from "react";
 
 function Crud() {
-  const [tarefas, setTarefas] = useState([]);
+  const [personagens, setPersonagens] = useState([]);
   const [input, setInput] = useState("");
   const [editandoId, setEditandoId] = useState(null);
 
   function salvar() {
     if (input === "") return;
 
+    // CRIAR
     if (editandoId === null) {
-      // CREATE
-      const novaTarefa = {
+      const novoPersonagem = {
         id: Date.now(),
         texto: input,
       };
 
-      setTarefas([...tarefas, novaTarefa]);
-    } else {
-      // UPDATE
-      const atualizadas = tarefas.map((item) =>
-        item.id === editandoId ? { ...item, texto: input } : item,
-      );
+      setPersonagens([...personagens, novoPersonagem]);
+    }
 
-      setTarefas(atualizadas);
+    // EDITAR
+    else {
+      const personagemAtualizado = personagens.map((item) => {
+        if (item.id === editandoId) {
+          return {
+            ...item,
+            texto: input,
+          };
+        }
+
+        return item;
+      });
+
+      setPersonagens(personagemAtualizado);
       setEditandoId(null);
     }
 
     setInput("");
   }
 
-  function editar(tarefa) {
-    setInput(tarefa.texto);
-    setEditandoId(tarefa.id);
+  function editar(personagem) {
+    setInput(personagem.texto);
+    setEditandoId(personagem.id);
   }
 
-  function remover(id) {
-    const filtradas = tarefas.filter((item) => item.id !== id);
-    setTarefas(filtradas);
+  function remover(idRemover) {
+    const listaAtualizada = personagens.filter((item) => item.id !== idRemover);
+
+    setPersonagens(listaAtualizada);
   }
 
   return (
     <div>
-      <h1>To Do ID Master</h1>
-
-      <input value={input} onChange={(e) => setInput(e.target.value)} />
-
+      <h2>Id</h2>
+      <input
+        type="text"
+        placeholder="Digite"
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+      />
       <button onClick={salvar}>{editandoId ? "Atualizar" : "Adicionar"}</button>
-
       <ul>
-        {tarefas.map((item) => (
+        {personagens.map((item) => {
           <li key={item.id}>
-            {item.texto}
-
             <button onClick={() => editar(item)}>Editar</button>
 
+            {/* Passamos APENAS O ID para a função remover, pois é só disso que ela precisa */}
             <button onClick={() => remover(item.id)}>Remover</button>
-          </li>
-        ))}
+          </li>;
+        })}
       </ul>
     </div>
   );
