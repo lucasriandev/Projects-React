@@ -1,73 +1,48 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function Crud() {
-  const [personagens, setPersonagens] = useState([]);
-  const [input, setInput] = useState("");
-  const [editandoId, setEditandoId] = useState(null);
+  const [personagens, setPersonagens] = useState(
+    () => JSON.parse(localStorage.getItem("Person")) || [],
+  );
+
+  const [novoPersonagem, setNovoPersonagem] = useState("");
+
+  useEffect(() => {
+    localStorage.setItem("Person", JSON.stringify(personagens));
+  }, [personagens]);
 
   function salvar() {
-    if (input === "") return;
-
-    // CRIAR
-    if (editandoId === null) {
-      const novoPersonagem = {
-        id: Date.now(),
-        texto: input,
-      };
-
+    if (novoPersonagem !== "") {
       setPersonagens([...personagens, novoPersonagem]);
+      setNovoPersonagem("");
     }
-
-    // EDITAR
-    else {
-      const personagemAtualizado = personagens.map((item) => {
-        if (item.id === editandoId) {
-          return {
-            ...item,
-            texto: input,
-          };
-        }
-
-        return item;
-      });
-
-      setPersonagens(personagemAtualizado);
-      setEditandoId(null);
-    }
-
-    setInput("");
   }
 
-  function editar(personagem) {
-    setInput(personagem.texto);
-    setEditandoId(personagem.id);
-  }
-
-  function remover(idRemover) {
-    const listaAtualizada = personagens.filter((item) => item.id !== idRemover);
-
-    setPersonagens(listaAtualizada);
+  function remover(indexRemover) {
+    const novaLista = personagens.filter((t, index) => index !== indexRemover);
+    setPersonagens(novaLista);
+    if (novaLista.length === 0) {
+      localStorage.removeItem("Person");
+    }
   }
 
   return (
     <div>
-      <h2>Id</h2>
+      <h2>Crud</h2>
       <input
         type="text"
         placeholder="Digite"
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
+        value={novoPersonagem}
+        onChange={(e) => setNovoPersonagem(e.target.value)}
       />
-      <button onClick={salvar}>{editandoId ? "Atualizar" : "Adicionar"}</button>
+      <button onClick={salvar}>Salvar</button>
       <ul>
-        {personagens.map((item) => {
-          <li key={item.id}>
-            <button onClick={() => editar(item)}>Editar</button>
-
-            {/* Passamos APENAS O ID para a função remover, pois é só disso que ela precisa */}
-            <button onClick={() => remover(item.id)}>Remover</button>
-          </li>;
-        })}
+        {personagens.map((item, index) => (
+          <li key={index}>
+            {item}
+            <button onClick={() => remover(index)}>🗑️</button>
+          </li>
+        ))}
       </ul>
     </div>
   );
