@@ -1,74 +1,73 @@
 import { useState, useEffect } from "react";
 
 function Crud() {
-  const [personagens, setPersonagens] = useState(
-    () => JSON.parse(localStorage.getItem("Person")) || [],
+  const [trabalho, setTrabalhos] = useState(
+    () => JSON.parse(localStorage.getItem("tarefas")) || [],
   );
 
-  const [novoPersonagem, setNovoPersonagem] = useState("");
-
-  const [editandoId, setEditandoId] = useState(null);
+  const [input, setInput] = useState("");
+  const [id, setId] = useState(null);
 
   useEffect(() => {
-    localStorage.setItem("Person", JSON.stringify(personagens));
-  }, [personagens]);
+    localStorage.setItem("tarefas", JSON.stringify(trabalho));
+  }, [trabalho]);
 
   function salvar() {
-    if (novoPersonagem === "") return;
-    if (editandoId === null) {
-      const personagem = {
+    if (input === "") return;
+
+    if (id === null) {
+      const novaTarefa = {
         id: Date.now(),
-        nome: novoPersonagem,
+        texto: input,
       };
-      setPersonagens([...personagens, personagem]);
-      setNovoPersonagem("");
+
+      setTrabalhos([...trabalho, novaTarefa]);
     } else {
-      const listaEditada = personagens.map((item) => {
-        if (item.id === editandoId) {
+      const listaEditada = trabalho.map((item) => {
+        if (item.id === id) {
           return {
             ...item,
-            nome: novoPersonagem,
+            texto: input,
           };
         }
-
         return item;
       });
-
-      setPersonagens(listaEditada);
-      setEditandoId(null);
+      setTrabalhos(listaEditada);
+      setId(null);
     }
-    setNovoPersonagem("");
+    setInput("");
   }
 
-  function editar(personagem) {
-    setNovoPersonagem(personagem.nome);
-    setEditandoId(personagem.id);
+  function editar(trabalho) {
+    setInput(trabalho.texto);
+    setId(trabalho.id);
   }
 
   function remover(indexRemover) {
-    const novaLista = personagens.filter((item) => item.id !== indexRemover);
-    setPersonagens(novaLista);
-    if (novaLista.length === 0) {
-      localStorage.removeItem("Person");
+    const novalista = trabalho.filter((item) => item.id !== indexRemover);
+    setTrabalhos(novalista);
+    if (novalista.length === 0) {
+      localStorage.removeItem("tarefas");
     }
   }
 
   return (
     <div>
-      <h2>Crud</h2>
+      <h2>Teste</h2>
       <input
         type="text"
         placeholder="Digite"
-        value={novoPersonagem}
-        onChange={(e) => setNovoPersonagem(e.target.value)}
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
       />
       <button onClick={salvar}>Salvar</button>
+
       <ul>
-        {personagens.map((item) => (
+        {trabalho.map((item) => (
           <li key={item.id}>
-            {item.nome}
-            <button onClick={() => editar(item)}>✏️</button>
+            {item.texto}
             <button onClick={() => remover(item.id)}>🗑️</button>
+            <button onClick={() => editar(item)}>🖊️</button>
           </li>
         ))}
       </ul>
