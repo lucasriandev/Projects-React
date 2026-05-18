@@ -1,29 +1,23 @@
 import { useState, useEffect } from "react";
 
 function Crud() {
-  const [trabalho, setTrabalhos] = useState(
-    () => JSON.parse(localStorage.getItem("tarefas")) || [],
-  );
+  const [dicas, setDicas] = useState(() => {
+    return JSON.parse(localStorage.getItem("dicas")) || [];
+  });
 
   const [input, setInput] = useState("");
   const [id, setId] = useState(null);
 
-  useEffect(() => {
-    localStorage.setItem("tarefas", JSON.stringify(trabalho));
-  }, [trabalho]);
-
   function salvar() {
     if (input === "") return;
-
     if (id === null) {
-      const novaTarefa = {
+      const novaDica = {
         id: Date.now(),
         texto: input,
       };
-
-      setTrabalhos([...trabalho, novaTarefa]);
+      setDicas([...dicas, novaDica]);
     } else {
-      const listaEditada = trabalho.map((item) => {
+      const dicaNova = dicas.map((item) => {
         if (item.id === id) {
           return {
             ...item,
@@ -32,28 +26,28 @@ function Crud() {
         }
         return item;
       });
-      setTrabalhos(listaEditada);
+      setDicas(dicaNova);
       setId(null);
     }
     setInput("");
   }
 
-  function editar(trabalho) {
-    setInput(trabalho.texto);
-    setId(trabalho.id);
+  function editar(dica) {
+    setId(dica.id);
+    setInput(dica.texto);
   }
 
   function remover(indexRemover) {
-    const novalista = trabalho.filter((item) => item.id !== indexRemover);
-    setTrabalhos(novalista);
-    if (novalista.length === 0) {
-      localStorage.removeItem("tarefas");
+    const listaNova = dicas.filter((item) => item.id !== indexRemover);
+    setDicas(listaNova);
+    if (listaNova.length === 0) {
+      localStorage.removeItem("dicas");
     }
   }
 
   return (
     <div>
-      <h2>Teste</h2>
+      <h1>Crud</h1>
       <input
         type="text"
         placeholder="Digite"
@@ -61,13 +55,12 @@ function Crud() {
         onChange={(e) => setInput(e.target.value)}
       />
       <button onClick={salvar}>Salvar</button>
-
       <ul>
-        {trabalho.map((item) => (
+        {dicas.map((item) => (
           <li key={item.id}>
             {item.texto}
-            <button onClick={() => remover(item.id)}>🗑️</button>
             <button onClick={() => editar(item)}>🖊️</button>
+            <button onClick={() => remover(item.id)}>🗑️</button>
           </li>
         ))}
       </ul>
