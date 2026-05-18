@@ -12,33 +12,29 @@ function ApiNome() {
         setNomes(dados);
         setInput("");
       })
-      .catch((error) => {
-        console.log(error);
+      .catch((erro) => {
+        console.log(erro);
       });
   }, []);
 
   const nomesFiltrados =
     input === ""
       ? nomes
-      : nomes.filter((item) =>
-          item.name.toLowerCase().includes(input.toLowerCase()),
-        );
-
-  //input vazio → usa todos (nomes)
-  //input com valor → cria nova lista filtrada
-  //"o título do item contém o texto digitado?"
+      : nomes.filter((item) => {
+          return item.name.toLowerCase().includes(input.toLocaleLowerCase());
+        });
 
   return (
     <div>
-      <h1>Nomes!</h1>
+      <h2>Nomes Aleatorios</h2>
       <input
         type="text"
-        value={input}
         placeholder="Digite"
+        value={input}
         onChange={(e) => setInput(e.target.value)}
       />
       {nomesFiltrados.length === 0 ? (
-        <p>Nenhum encontrado</p>
+        <p>Nenhum encontrado!</p>
       ) : (
         <ul>
           {nomesFiltrados.map((item, index) => (
