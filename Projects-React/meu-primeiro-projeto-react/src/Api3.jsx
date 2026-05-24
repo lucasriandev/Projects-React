@@ -16,34 +16,6 @@ function ApiNome() {
         console.log(erro);
       });
   }, []);
-
-  const nomesFiltrados =
-    input === ""
-      ? nomes
-      : nomes.filter((item) => {
-          return item.name.toLowerCase().includes(input.toLocaleLowerCase());
-        });
-
-  return (
-    <div>
-      <h2>Nomes Aleatorios</h2>
-      <input
-        type="text"
-        placeholder="Digite"
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-      />
-      {nomesFiltrados.length === 0 ? (
-        <p>Nenhum encontrado!</p>
-      ) : (
-        <ul>
-          {nomesFiltrados.map((item, index) => (
-            <li key={index}>{item.name}</li>
-          ))}
-        </ul>
-      )}
-    </div>
-  );
 }
 
 export default ApiNome;

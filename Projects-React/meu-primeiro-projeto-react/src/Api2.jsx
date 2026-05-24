@@ -15,34 +15,6 @@ function LojaOnline() {
         console.log(erro);
       });
   }, []);
-
-  const filtrados =
-    input === ""
-      ? loja
-      : loja.filter((item) =>
-          item.title.toLowerCase().includes(input.toLowerCase()),
-        );
-
-  return (
-    <div>
-      <h1>Loja</h1>
-
-      <input
-        type="text"
-        placeholder="Buscar produto..."
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-      />
-
-      <ul>
-        {filtrados.map((item) => (
-          <li key={item.id}>
-            {item.title} - R$ {item.price}
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
 }
 
 export default LojaOnline;
