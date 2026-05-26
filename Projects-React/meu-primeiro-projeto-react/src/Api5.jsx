@@ -18,6 +18,28 @@ function Receitas() {
         console.log(error);
       });
   }, [busca]);
+
+  return (
+    <div>
+      <h1>Receitas!</h1>
+      <p>Busque sua receita!</p>
+      <input
+        type="text"
+        placeholder="Digite!"
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+      />
+      <button onClick={() => setBusca(input)}>Buscar</button>
+      <ul>
+        {receitas.map((item, index) => (
+          <li key={index}>
+            {" "}
+            {item.strMeal} - {item.strCategory}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
 }
 
 export default Receitas;
