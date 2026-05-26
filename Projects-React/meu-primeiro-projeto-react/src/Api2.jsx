@@ -15,6 +15,36 @@ function LojaOnline() {
         console.log(erro);
       });
   }, []);
+
+  const filtros =
+    input === ""
+      ? loja
+      : loja.filter((item) => {
+          return item.title.toLowerCase().includes(input.toLowerCase());
+        });
+
+  return (
+    <div>
+      <h2>Produtos da loja!</h2>
+      <p>Digite e procure seu produto!</p>
+      <input
+        type="text"
+        placeholder="Digite"
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+      />
+
+      {filtros.length === 0 ? (
+        <p>Nenhum resultado encontrado1</p>
+      ) : (
+        <ul>
+          {filtros.map((item, index) => (
+            <li key={index}>{item.title}</li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
 }
 
 export default LojaOnline;
