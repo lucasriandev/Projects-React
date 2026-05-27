@@ -1,23 +1,29 @@
 import { useState, useEffect } from "react";
 
 function Crud() {
-  const [dicas, setDicas] = useState(() => {
-    return JSON.parse(localStorage.getItem("dicas")) || [];
+  const [personagem, setPersonagem] = useState(() => {
+    return JSON.parse(localStorage.getItem("p")) || [];
   });
 
   const [input, setInput] = useState("");
+
   const [id, setId] = useState(null);
+
+  useEffect(() => {
+    localStorage.setItem("p", JSON.stringify(personagem));
+  }, [personagem]);
 
   function salvar() {
     if (input === "") return;
     if (id === null) {
-      const novaDica = {
+      const novoPersonagem = {
         id: Date.now(),
         texto: input,
       };
-      setDicas([...dicas, novaDica]);
+      setPersonagem([...personagem, novoPersonagem]);
+      setInput("");
     } else {
-      const dicaNova = dicas.map((item) => {
+      const novoPersonagem = personagem.map((item) => {
         if (item.id === id) {
           return {
             ...item,
@@ -26,28 +32,28 @@ function Crud() {
         }
         return item;
       });
-      setDicas(dicaNova);
+      setPersonagem(novoPersonagem);
       setId(null);
+      setInput("");
     }
-    setInput("");
   }
 
-  function editar(dica) {
-    setId(dica.id);
-    setInput(dica.texto);
+  function remover(indexRemove) {
+    const novaLista = personagem.filter((item) => item.id !== indexRemove);
+    setPersonagem(novaLista);
+    if (novaLista.length === 0) {
+      localStorage.removeItem("p");
+    }
   }
 
-  function remover(indexRemover) {
-    const listaNova = dicas.filter((item) => item.id !== indexRemover);
-    setDicas(listaNova);
-    if (listaNova.length === 0) {
-      localStorage.removeItem("dicas");
-    }
+  function editar(personagem) {
+    setInput(personagem.texto);
+    setId(personagem.id);
   }
 
   return (
     <div>
-      <h1>Crud</h1>
+      <h2>Crud</h2>
       <input
         type="text"
         placeholder="Digite"
@@ -56,7 +62,7 @@ function Crud() {
       />
       <button onClick={salvar}>Salvar</button>
       <ul>
-        {dicas.map((item) => (
+        {personagem.map((item) => (
           <li key={item.id}>
             {item.texto}
             <button onClick={() => editar(item)}>🖊️</button>
