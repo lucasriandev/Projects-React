@@ -1,29 +1,28 @@
 import { useState, useEffect } from "react";
 
 function Crud() {
-  const [personagem, setPersonagem] = useState(() => {
-    return JSON.parse(localStorage.getItem("p")) || [];
+  const [supermercado, setSuperMercado] = useState(() => {
+    return JSON.parse(localStorage.getItem("produtos")) || [];
   });
 
   const [input, setInput] = useState("");
-
   const [id, setId] = useState(null);
 
   useEffect(() => {
-    localStorage.setItem("p", JSON.stringify(personagem));
-  }, [personagem]);
+    localStorage.setItem("produtos", JSON.stringify(supermercado));
+  }, [supermercado]);
 
   function salvar() {
     if (input === "") return;
     if (id === null) {
-      const novoPersonagem = {
+      const novoProduto = {
         id: Date.now(),
         texto: input,
       };
-      setPersonagem([...personagem, novoPersonagem]);
+      setSuperMercado([...supermercado, novoProduto]);
       setInput("");
     } else {
-      const novoPersonagem = personagem.map((item) => {
+      const produtoEditado = supermercado.map((item) => {
         if (item.id === id) {
           return {
             ...item,
@@ -32,37 +31,40 @@ function Crud() {
         }
         return item;
       });
-      setPersonagem(novoPersonagem);
+
+      setSuperMercado(produtoEditado);
       setId(null);
       setInput("");
     }
   }
 
-  function remover(indexRemove) {
-    const novaLista = personagem.filter((item) => item.id !== indexRemove);
-    setPersonagem(novaLista);
+  function remover(indexRemover) {
+    const novaLista = supermercado.filter((item) => item.id !== indexRemover);
+    setSuperMercado(novaLista);
     if (novaLista.length === 0) {
-      localStorage.removeItem("p");
+      localStorage.removeItem("produtos");
     }
   }
 
-  function editar(personagem) {
-    setInput(personagem.texto);
-    setId(personagem.id);
+  function editar(p) {
+    setInput(p.texto);
+    setId(p.id);
   }
 
   return (
     <div>
-      <h2>Crud</h2>
+      <h1>Crud Supermercado!</h1>
       <input
         type="text"
         placeholder="Digite"
         value={input}
         onChange={(e) => setInput(e.target.value)}
       />
+
       <button onClick={salvar}>Salvar</button>
+
       <ul>
-        {personagem.map((item) => (
+        {supermercado.map((item) => (
           <li key={item.id}>
             {item.texto}
             <button onClick={() => editar(item)}>🖊️</button>
