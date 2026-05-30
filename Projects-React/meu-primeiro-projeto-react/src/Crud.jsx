@@ -1,28 +1,31 @@
 import { useState, useEffect } from "react";
 
 function Crud() {
-  const [supermercado, setSuperMercado] = useState(() => {
-    return JSON.parse(localStorage.getItem("produtos")) || [];
-  });
+  const [lutas, setLutas] = useState(
+    () => JSON.parse(localStorage.getItem("luta")) || [],
+  );
 
   const [input, setInput] = useState("");
   const [id, setId] = useState(null);
 
   useEffect(() => {
-    localStorage.setItem("produtos", JSON.stringify(supermercado));
-  }, [supermercado]);
+    localStorage.setItem("luta", JSON.stringify(lutas));
+  }, [lutas]);
 
   function salvar() {
     if (input === "") return;
+
     if (id === null) {
-      const novoProduto = {
+      const novaLuta = {
         id: Date.now(),
-        texto: input,
+        input: texto,
       };
-      setSuperMercado([...supermercado, novoProduto]);
+
+      setLutas([...lutas, novaLuta]);
       setInput("");
+      setId(null);
     } else {
-      const produtoEditado = supermercado.map((item) => {
+      const lutaNova = lutas.map((item) => {
         if (item.id === id) {
           return {
             ...item,
@@ -31,44 +34,42 @@ function Crud() {
         }
         return item;
       });
-
-      setSuperMercado(produtoEditado);
-      setId(null);
+      setLutas(lutaNova);
       setInput("");
+      setId(null);
     }
   }
 
   function remover(indexRemover) {
-    const novaLista = supermercado.filter((item) => item.id !== indexRemover);
-    setSuperMercado(novaLista);
+    const novaLista = lutas.filter((item) => item.id !== indexRemover);
+    setLutas(novaLista);
     if (novaLista.length === 0) {
-      localStorage.removeItem("produtos");
+      localStorage.removeItem("luta");
     }
   }
 
-  function editar(p) {
-    setInput(p.texto);
-    setId(p.id);
+  function editar(l) {
+    setInput(l.texto);
+    setId(l.id);
   }
 
   return (
     <div>
-      <h1>Crud Supermercado!</h1>
+      <h1>Crud</h1>
       <input
         type="text"
         placeholder="Digite"
         value={input}
         onChange={(e) => setInput(e.target.value)}
       />
-
       <button onClick={salvar}>Salvar</button>
 
       <ul>
-        {supermercado.map((item) => (
+        {lutas.map((item) => (
           <li key={item.id}>
             {item.texto}
+            <button onClick={() => remover(item.id)}>❌</button>
             <button onClick={() => editar(item)}>🖊️</button>
-            <button onClick={() => remover(item.id)}>🗑️</button>
           </li>
         ))}
       </ul>
