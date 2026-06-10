@@ -1,29 +1,28 @@
 import { useState, useEffect } from "react";
 
 function Crud() {
-  const [jogadores, setJogadores] = useState(() => {
-    return JSON.parse(localStorage.getItem("jogadores")) || [];
+  const [personagem, setPersonagem] = useState(() => {
+    return JSON.parse(localStorage.getItem("boys")) || [];
   });
 
   const [input, setInput] = useState("");
-
   const [id, setId] = useState(null);
 
   useEffect(() => {
-    localStorage.setItem("jogadores", JSON.stringify(jogadores));
-  }, [jogadores]);
+    localStorage.setItem("boys", JSON.stringify(personagem));
+  }, [personagem]);
 
   function salvar() {
     if (input === "") return;
     if (id === null) {
-      const novoJogadores = {
+      const novoPersonagem = {
         id: Date.now(),
         texto: input,
       };
-      setJogadores([...jogadores, novoJogadores]);
+      setPersonagem([...personagem, novoPersonagem]);
       setInput("");
     } else {
-      const editarJogador = jogadores.map((item) => {
+      const editarPersonagem = personagem.map((item) => {
         if (item.id === id) {
           return {
             ...item,
@@ -32,40 +31,41 @@ function Crud() {
         }
         return item;
       });
-      setJogadores(editarJogador);
+      setPersonagem(editarPersonagem);
       setInput("");
       setId(null);
     }
   }
 
-  function editar(j) {
-    setInput(j.texto);
-    setId(j.id);
+  function editar(t) {
+    setId(t.id);
+    setInput(t.texto);
   }
 
   function remover(indexRemover) {
-    const novaLista = jogadores.filter((item) => item.id !== indexRemover);
-    setJogadores(novaLista);
+    const novaLista = personagem.filter((item) => item.id !== indexRemover);
+    setPersonagem(novaLista);
+    if (novaLista.length === 0) {
+      localStorage.removeItem("boys");
+    }
   }
 
   return (
     <div>
-      <h1>Copa do mundo!</h1>
+      <h2>The boys!</h2>
       <input
         type="text"
-        placeholder="Digite"
         value={input}
+        placeholder="Digite!"
         onChange={(e) => setInput(e.target.value)}
       />
       <button onClick={salvar}>Salvar</button>
       <ul>
-        {jogadores.map((item) => (
+        {personagem.map((item) => (
           <li key={item.id}>
             {item.texto}
-
-            <button onClick={() => editar(item)}>Editar</button>
-
-            <button onClick={() => remover(item.id)}>Remover</button>
+            <button onClick={() => editar(item)}>🖊️</button>
+            <button onClick={() => remover(item.id)}>❌</button>
           </li>
         ))}
       </ul>
