@@ -1,41 +1,37 @@
 import { useState, useEffect } from "react";
 
 function LojaOnline() {
-  const [loja, setLoja] = useState([]);
+  const [produtos, setProdutos] = useState([]);
   const [input, setInput] = useState("");
 
   useEffect(() => {
     fetch(`https://fakestoreapi.com/products`)
-      .then((resposta) => resposta.json())
+      .then((resp) => resp.json())
       .then((dados) => {
         console.log(dados);
-        setLoja(dados);
-      })
-      .catch((erro) => {
-        console.log(erro);
+        setProdutos(dados);
       });
   }, []);
 
   const filtros =
     input === ""
-      ? loja
-      : loja.filter((item) => {
-          return item.title.toLowerCase().includes(input.toLowerCase());
+      ? produtos
+      : produtos.filter((item) => {
+          return item.title.toLowerCase().includes(input.toLocaleLowerCase());
         });
 
   return (
     <div>
-      <h2>Produtos da loja!</h2>
-      <p>Digite e procure seu produto!</p>
+      <h2>Produtos em estoques!</h2>
       <input
         type="text"
-        placeholder="Digite"
         value={input}
+        placeholder="Ache seu produto!"
         onChange={(e) => setInput(e.target.value)}
       />
 
       {filtros.length === 0 ? (
-        <p>Nenhum resultado encontrado1</p>
+        <h2>Nenhum resultado</h2>
       ) : (
         <ul>
           {filtros.map((item, index) => (
