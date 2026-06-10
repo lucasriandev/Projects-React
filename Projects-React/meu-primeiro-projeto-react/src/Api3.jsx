@@ -1,49 +1,43 @@
 import { useState, useEffect } from "react";
+//fetch(`https://jsonplaceholder.typicode.com/users`)
 
 function ApiNome() {
-  const [nomes, setNomes] = useState([]);
+  const [personagem, setPersonagem] = useState([]);
   const [input, setInput] = useState("");
+  const [busca, setBusca] = useState("");
+  const [carregando, setCarregando] = useState(true);
 
   useEffect(() => {
-    fetch(`https://jsonplaceholder.typicode.com/users`)
-      .then((res) => res.json())
+    if (busca === "") return;
+    fetch(`https://pokeapi.co/api/v2/pokemon/${busca}`)
+      .then((resp) => resp.json())
       .then((dados) => {
         console.log(dados);
-        setNomes(dados);
-        setInput("");
+        setCarregando(false);
+        setPersonagem(dados);
       })
-      .catch((erro) => {
-        console.log(erro);
+      .catch((error) => {
+        console.error(error);
       });
-  }, []);
+  }, [busca]);
 
-  const filtrados =
-    input === ""
-      ? nomes
-      : nomes.filter((item) => {
-          return item.name.toLowerCase().includes(input.toLowerCase());
-        });
+  if (carregando === false) {
+    <h2>Carregando....</h2>;
+  }
 
   return (
     <div>
-      <h2>Nomes Gerados por api!</h2>
-      <p>Filtre o nome!</p>
+      <h1>Pokemons</h1>
       <input
         type="text"
-        placeholder="Digite"
         value={input}
+        placeholder="Digite!"
         onChange={(e) => setInput(e.target.value)}
       />
-
-      {filtrados.length === 0 ? (
-        <p>Nenhum resultado encontrado!</p>
-      ) : (
-        <ul>
-          {filtrados.map((item, index) => (
-            <li key={index}>{item.name}</li>
-          ))}
-        </ul>
-      )}
+      <button onClick={() => setBusca(input)}>Buscar</button>
+      <ul>
+        <li></li>
+      </ul>
     </div>
   );
 }
