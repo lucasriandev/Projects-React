@@ -2,10 +2,9 @@ import { useState, useEffect } from "react";
 //fetch(`https://jsonplaceholder.typicode.com/users`)
 
 function ApiNome() {
-  const [personagem, setPersonagem] = useState([]);
+  const [pokemon, setPokemon] = useState(null);
   const [input, setInput] = useState("");
   const [busca, setBusca] = useState("");
-  const [carregando, setCarregando] = useState(true);
 
   useEffect(() => {
     if (busca === "") return;
@@ -13,31 +12,25 @@ function ApiNome() {
       .then((resp) => resp.json())
       .then((dados) => {
         console.log(dados);
-        setCarregando(false);
-        setPersonagem(dados);
+        setPokemon(dados);
+        setInput("");
       })
-      .catch((error) => {
-        console.error(error);
+      .catch((erro) => {
+        console.log(erro, "Errooo");
       });
   }, [busca]);
 
-  if (carregando === false) {
-    <h2>Carregando....</h2>;
-  }
-
   return (
     <div>
-      <h1>Pokemons</h1>
+      <h1>Pokemon</h1>
       <input
         type="text"
+        placeholder="Digite"
         value={input}
-        placeholder="Digite!"
         onChange={(e) => setInput(e.target.value)}
       />
       <button onClick={() => setBusca(input)}>Buscar</button>
-      <ul>
-        <li></li>
-      </ul>
+      <ul>{pokemon && <li>{pokemon.name}</li>}</ul>
     </div>
   );
 }
