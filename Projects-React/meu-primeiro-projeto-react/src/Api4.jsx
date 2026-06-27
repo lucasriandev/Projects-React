@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+//    fetch(`https://restcountries.com/v3.1/name/${busca}`)
 
 function Paises() {
   const [paises, setPaises] = useState([]);
@@ -8,33 +9,26 @@ function Paises() {
   useEffect(() => {
     if (busca === "") return;
     fetch(`https://restcountries.com/v3.1/name/${busca}`)
-      .then((resp) => resp.json())
+      .then((res) => res.json())
       .then((dados) => {
         console.log(dados);
         setPaises(dados);
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        console.error("erroooo");
+      });
   }, [busca]);
 
   return (
     <div>
-      <h1>Paises!</h1>
+      <h1>Paises</h1>
       <input
         type="text"
-        placeholder="Digite um pais"
+        placeholder="Digite!"
         value={input}
         onChange={(e) => setInput(e.target.value)}
       />
-      <button onClick={() => setBusca(input)}>Salvar</button>
-      <ul>
-        {paises.map((item) => (
-          <li>
-            {item.name.common}
-            <br></br>
-            <img src={item.flags.png} />
-          </li>
-        ))}
-      </ul>
+      <button onClick={() => setBusca(input)}>Buscar</button>
     </div>
   );
 }
