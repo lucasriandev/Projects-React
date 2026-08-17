@@ -7,6 +7,7 @@ import ApiNome from "./Api3";
 import LojaOnline from "./Api2";
 import Paises from "./Api4";
 import Receitas from "./Api5";
+import ServerExterno from "./app6";
 
 function App() {
   return (
@@ -96,6 +97,18 @@ function App() {
         >
           Receitas
         </Link>
+        <Link
+          to="/app6"
+          style={{
+            background: "orange",
+            color: "white",
+            padding: "10px",
+            marginLeft: "5px",
+            borderRadius: "10px",
+          }}
+        >
+          ServerExterno
+        </Link>
       </nav>
 
       <Routes>
@@ -107,6 +120,7 @@ function App() {
         <Route path="/Api4" element={<Paises />} />
         <Route path="/Api5" element={<Receitas />} />
         <Route path="/filme/:id" element={<Dinamica />} />
+        <Route path="/app6" element={<ServerExterno />} />
       </Routes>
     </BrowserRouter>
   );
