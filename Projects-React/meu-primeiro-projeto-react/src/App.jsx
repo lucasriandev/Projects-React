@@ -8,6 +8,7 @@ import LojaOnline from "./Api2";
 import Paises from "./Api4";
 import Receitas from "./Api5";
 import ServerExterno from "./app6";
+import ServerPersonagem from "./app7";
 
 function App() {
   return (
@@ -109,6 +110,18 @@ function App() {
         >
           ServerExterno
         </Link>
+        <Link
+          to="/app7"
+          style={{
+            background: "blue",
+            color: "white",
+            padding: "10px",
+            marginLeft: "5px",
+            borderRadius: "10px",
+          }}
+        >
+          ServidorPersonagem
+        </Link>
       </nav>
 
       <Routes>
@@ -121,6 +134,7 @@ function App() {
         <Route path="/Api5" element={<Receitas />} />
         <Route path="/filme/:id" element={<Dinamica />} />
         <Route path="/app6" element={<ServerExterno />} />
+        <Route path="/app7" element={<ServerPersonagem />} />
       </Routes>
     </BrowserRouter>
   );
