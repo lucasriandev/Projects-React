@@ -4,6 +4,7 @@ function ServerPersonagem() {
   const [personagem, setPersonagens] = useState([]);
   const [nome, setNome] = useState("");
   const [poder, setPoder] = useState("");
+  const [idEditando, setIdEditando] = useState(null)
 
   const get = async () => {
     try {
@@ -21,25 +22,41 @@ function ServerPersonagem() {
       console.error("Erro ao buscar api", error);
     }
   };
-  const post = async () => {
-    const novoPost = {
+  
+  const salver = async ()=>{
+    const novoDados = {
       nome: nome,
-      poder: poder,
-    };
+      poder: poder
+    }
 
     try {
-      await fetch("http://localhost:3000/personagem", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(novoPost),
-      });
-      get();
+      
+      const url = idEditando 
+        ? `http://localhost:3000/personagem/${idEditando}` 
+        : "http://localhost:3000/personagem";
+
+        const metodo = idEditando ? "PUT" : "POST"
+        
+        await fetch(url, {
+          method: method,
+          headers: {
+            "Content-Type" : "application/json"
+          },
+          body: JSON.stringify(novoDados)
+        })
+
+        setNome('')
+        setPoder('')
+        setIdEditando(null)
+
+        get()
     } catch (error) {
-      console.error("Erro no post", error);
+      console.error("Erro ao salver", error)
     }
-  };
+  }
+
+ 
+
 
   useEffect(() => {
     get();
@@ -62,7 +79,7 @@ function ServerPersonagem() {
         onChange={(e) => setPoder(e.target.value)}
       />
       <br />
-      <button onClick={post}>Criar novo personagem!</button>
+      <button onClick={}>Criar novo personagem!</button>
       <ul>
         {personagem.map((p) => (
           <li key={p.id}>
