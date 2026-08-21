@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 
 function ServerPersonagem() {
-  const [personagem, setPersonagens] = useState([]);
+  const [personagem, setPersonagem] = useState([]);
   const [nome, setNome] = useState("");
   const [poder, setPoder] = useState("");
-  const [idEditando, setIdEditando] = useState(null);
+  const [idEditado, setIdEditado] = useState(null);
 
   const get = async () => {
     try {
@@ -12,45 +12,48 @@ function ServerPersonagem() {
       const dados = await resposta.json();
 
       if (Array.isArray(dados)) {
-        setPersonagens(dados);
+        setPersonagem(dados);
       } else if (dados.dados) {
-        setPersonagens(dados.dados);
+        setPersonagem(dados.dados);
       } else {
-        setPersonagens([]);
+        setPersonagem([]);
       }
     } catch (error) {
-      console.error("Erro ao buscar api", error);
+      console.error("Erro no get", error);
     }
   };
 
-  const salvar = async () => {
-    const novoDados = {
+  useEffect(() => {
+    get();
+  }, []);
+
+  const salver = async () => {
+    const novosPersonagem = {
       nome: nome,
       poder: poder,
     };
 
     try {
-      const url = idEditando
-        ? `http://localhost:3000/personagem/${idEditando}`
-        : "http://localhost:3000/personagem";
-
-      const metodo = idEditando ? "PUT" : "POST";
+      const url = idEditado
+        ? `http://localhost:3000/personagem/${idEditado}`
+        : `http://localhost:3000/personagem/`;
+      const metodo = idEditado ? "PUT" : "POST";
 
       await fetch(url, {
         method: metodo,
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(novoDados),
+        body: JSON.stringify(novosPersonagem),
       });
 
       setNome("");
       setPoder("");
-      setIdEditando(null);
+      setIdEditado(null);
 
       get();
     } catch (error) {
-      console.error("Erro ao salver", error);
+      console.error("Erro ao criar personagem", error);
     }
   };
 
@@ -65,79 +68,49 @@ function ServerPersonagem() {
     }
   };
 
-  const prepararEdicao = (p) => {
+  function edicao(p) {
     setNome(p.nome);
     setPoder(p.poder);
-    setIdEditando(p.id);
-  };
-
-  useEffect(() => {
-    get();
-  }, []);
+    setIdEditado(p.id);
+  }
 
   return (
     <div>
-      <h1>Meu banco de dados de personagem!</h1>
-
-      <div style={{ marginBottom: "20px" }}>
-        <input
-          type="text"
-          placeholder="Nome do Personagem"
-          value={nome}
-          onChange={(e) => setNome(e.target.value)}
-          style={{ marginRight: "5px" }}
-        />
-        <input
-          type="text"
-          placeholder="Poder"
-          value={poder}
-          onChange={(e) => setPoder(e.target.value)}
-          style={{ marginRight: "5px" }}
-        />
-
-        {/* O texto do botão muda se estiver editando ou não */}
+      Db de Personagem!
+      <input
+        type="text"
+        placeholder="Nome"
+        value={nome}
+        onChange={(e) => setNome(e.target.value)}
+      />
+      <input
+        type="text"
+        placeholder="Poder"
+        value={poder}
+        onChange={(e) => setPoder(e.target.value)}
+      />
+      <button onClick={salver}>{idEditado ? "Editar" : "Salvar"}</button>
+      {idEditado && (
         <button
-          onClick={salvar}
-          style={{
-            backgroundColor: idEditando ? "orange" : "green",
-            color: "white",
+          onClick={() => {
+            setIdEditando(null);
+
+            setNome("");
+
+            setPoder("");
           }}
+          style={{ marginLeft: "5px" }}
         >
-          {idEditando ? "Salvar Edição" : "Criar novo personagem!"}
+          Cancelar
         </button>
-
-        {/* Botão para cancelar a edição e voltar ao modo de criar */}
-        {idEditando && (
-          <button
-            onClick={() => {
-              setIdEditando(null);
-              setNome("");
-              setPoder("");
-            }}
-            style={{ marginLeft: "5px" }}
-          >
-            Cancelar
-          </button>
-        )}
-      </div>
-
+      )}
       <ul>
         {personagem.map((p) => (
-          <li key={p.id} style={{ marginBottom: "10px" }}>
+          <li key={p.id}>
             <strong>{p.nome}</strong> (Poder: {p.poder})
             {/* Novos botões de Editar e Deletar */}
-            <button
-              onClick={() => prepararEdicao(p)}
-              style={{ marginLeft: "10px", cursor: "pointer" }}
-            >
-              ✏️ Editar
-            </button>
-            <button
-              onClick={() => deletar(p.id)}
-              style={{ marginLeft: "5px", cursor: "pointer", color: "red" }}
-            >
-              🗑️ Deletar
-            </button>
+            <button onClick={() => edicao(p)}>✏️ Editar</button>
+            <button onClick={() => deletar(p.id)}>🗑️ Deletar</button>
           </li>
         ))}
       </ul>
