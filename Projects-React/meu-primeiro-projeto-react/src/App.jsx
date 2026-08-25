@@ -9,6 +9,7 @@ import Paises from "./Api4";
 import Receitas from "./Api5";
 import ServerExterno from "./app6";
 import ServerPersonagem from "./app7";
+import ServerAnimes from "./app8";
 
 function App() {
   return (
@@ -122,6 +123,18 @@ function App() {
         >
           ServidorPersonagem
         </Link>
+        <Link
+          to="/app8"
+          style={{
+            background: "red",
+            color: "white",
+            padding: "10px",
+            marginLeft: "5px",
+            borderRadius: "10px",
+          }}
+        >
+          ServidorAnimes
+        </Link>
       </nav>
 
       <Routes>
@@ -135,6 +148,7 @@ function App() {
         <Route path="/filme/:id" element={<Dinamica />} />
         <Route path="/app6" element={<ServerExterno />} />
         <Route path="/app7" element={<ServerPersonagem />} />
+        <Route path="/app8" element={<ServerAnimes />} />
       </Routes>
     </BrowserRouter>
   );
