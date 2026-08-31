@@ -10,6 +10,7 @@ import Receitas from "./Api5";
 import ServerExterno from "./app6";
 import ServerPersonagem from "./app7";
 import ServerAnimes from "./app8";
+import Cadastro from "./app9";
 
 function App() {
   return (
@@ -135,6 +136,18 @@ function App() {
         >
           ServidorAnimes
         </Link>
+        <Link
+          to="/app9"
+          style={{
+            background: "green",
+            color: "white",
+            padding: "10px",
+            marginLeft: "5px",
+            borderRadius: "10px",
+          }}
+        >
+          ServidorCadastro
+        </Link>
       </nav>
 
       <Routes>
@@ -149,6 +162,7 @@ function App() {
         <Route path="/app6" element={<ServerExterno />} />
         <Route path="/app7" element={<ServerPersonagem />} />
         <Route path="/app8" element={<ServerAnimes />} />
+        <Route path="/app9" element={<Cadastro />} />
       </Routes>
     </BrowserRouter>
   );
