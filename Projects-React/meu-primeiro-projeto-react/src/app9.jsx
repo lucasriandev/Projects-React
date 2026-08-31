@@ -14,7 +14,7 @@ function Cadastro() {
       if (Array.isArray(dados)) {
         setCadastros(dados);
       } else if (Array.isArray(dados.dados)) {
-        setCadastros(dados);
+        setCadastros(dados.dados);
       } else if (Array.isArray(dados.cadastros)) {
         setCadastros(dados.cadastros);
       } else {
@@ -29,7 +29,7 @@ function Cadastro() {
   const post = async () => {
     const novoCadastro = {
       email: email,
-      senha: senha,
+      senha: Number(senha),
     };
 
     try {
