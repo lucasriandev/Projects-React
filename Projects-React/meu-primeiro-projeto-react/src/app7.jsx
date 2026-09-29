@@ -39,6 +39,14 @@ function ServerPersonagem() {
         : `http://localhost:3000/personagem/`;
       const metodo = idEditado ? "PUT" : "POST";
 
+      /* 
+      if (idEditado) {
+      url = `http://localhost:3000/personagem/${idEditado}`;
+      } else {
+      url = `http://localhost:3000/personagem/`;
+      }
+      */
+
       await fetch(url, {
         method: metodo,
         headers: {
@@ -56,6 +64,38 @@ function ServerPersonagem() {
       console.error("Erro ao criar personagem", error);
     }
   };
+
+  /*REACT
+
+usuário clica em Naruto
+        ↓
+edicao(p)
+        ↓
+setIdEditado(p.id)
+        ↓
+idEditado = 2
+        ↓
+salver()
+        ↓
+PUT /personagem/2
+        ↓
+        ↓
+        ↓
+SERVIDOR
+
+router.put("/:id")
+        ↓
+req.params.id
+        ↓
+"2"
+        ↓
+Number(...)
+        ↓
+2
+        ↓
+Prisma
+        ↓
+atualiza registro ID 2 */
 
   const deletar = async (id) => {
     try {
@@ -119,3 +159,23 @@ function ServerPersonagem() {
 }
 
 export default ServerPersonagem;
+
+/*                  REACT                         SERVIDOR
+
+              idEditado
+                  ↓
+                  2
+                  ↓
+       /personagem/2
+                  ↓
+            HTTP PUT
+                  ↓
+                  └──────────────────────→ req.params.id
+                                                ↓
+                                               "2"
+                                                ↓
+                                             Number
+                                                ↓
+                                                2
+                                                ↓
+                                              Prisma */
