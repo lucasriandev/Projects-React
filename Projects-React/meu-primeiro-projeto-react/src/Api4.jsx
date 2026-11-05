@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 //    fetch(`https://restcountries.com/v3.1/name/${busca}`)
 
-function Paises() {
+function FILMES2() {
   const [busca, setBusca] = useState("");
   const [input, setInput] = useState("");
-  const [paises, setPaises] = useState([]);
+  const [filmes, setFilmes] = useState([]);
 
   useEffect(() => {
     if (busca === "") return;
@@ -13,7 +13,8 @@ function Paises() {
       .then((resposta) => resposta.json())
       .then((dados) => {
         console.log(dados);
-        setPaises(dados);
+        setFilmes(dados);
+        setInput("");
       })
       .catch((error) => {
         console.log(error);
@@ -31,7 +32,12 @@ function Paises() {
       />
 
       <button onClick={() => setBusca(input)}>Buscar</button>
+      <ul>
+        {filmes.map((item, index) => {
+          return <li key={index}>{item.show.name}</li>;
+        })}
+      </ul>
     </div>
   );
 }
-export default Paises;
+export default FILMES2;
