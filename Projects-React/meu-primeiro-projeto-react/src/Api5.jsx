@@ -2,17 +2,22 @@ import { useState, useEffect } from "react";
 //fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${busca}`);
 
 function Receitas() {
-  const [receitas, setReceitas] = useState([]);
-  const [input, setInput] = useState("");
   const [busca, setBusca] = useState("");
+  const [input, setInput] = useState("");
+  const [receita, setReceitas] = useState([]);
 
   useEffect(() => {
     if (busca === "") return;
+
     fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${busca}`)
       .then((res) => res.json())
       .then((dados) => {
         console.log(dados);
         setReceitas(dados.meals || []);
+        setInput("");
+      })
+      .catch((error) => {
+        console.log(error);
       });
   }, [busca]);
 
@@ -21,14 +26,14 @@ function Receitas() {
       <h1>Receitas</h1>
       <input
         type="text"
-        placeholder="Busque!"
         value={input}
+        placeholder="Digite a receita que deseja!"
         onChange={(e) => setInput(e.target.value)}
       />
-      <button onClick={() => setBusca(input)}>Buscar</button>
+      <button onClick={() => setBusca(input)}>BUSCAR</button>
       <ul>
-        {receitas.map((item) => (
-          <li>{item.strMeal}</li>
+        {receita.map((item, index) => (
+          <li key={index}>{item.strMeal}</li>
         ))}
       </ul>
     </div>
