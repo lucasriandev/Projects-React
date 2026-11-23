@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 
 //    fetch(`https://fakestoreapi.com/products`)
 
+/*
 function LojaOnline() {
   const [produtos, setProdutos] = useState([]);
   const [input, setInput] = useState("");
@@ -36,6 +37,52 @@ function LojaOnline() {
       />
       {filtros.length === 0 ? (
         <h1>Nenhum produto encontrado1</h1>
+      ) : (
+        <ul>
+          {filtros.map((item) => (
+            <li>{item.title}</li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
+  */
+
+function LojaOnline() {
+  const [input, setInput] = useState("");
+  const [produtos, setProdutos] = useState([]);
+
+  useEffect(() => {
+    fetch(`https://fakestoreapi.com/products`)
+      .then((resposta) => resposta.json())
+      .then((dados) => {
+        console.log(dados);
+        setProdutos(dados);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
+  const filtros =
+    input == ""
+      ? produtos
+      : produtos.filter((item) => {
+          return item.toLowerCase().includes(input.toLocaleLowerCase());
+        });
+
+  return (
+    <div>
+      <h1>Produtos da loja!</h1>
+      <input
+        type="text"
+        value={input}
+        placeholder="Digite o produto!"
+        onChange={(e) => setInput(e.target.value)}
+      />
+      {filtros.length === 0 ? (
+        <h1>Nada encontrado</h1>
       ) : (
         <ul>
           {filtros.map((item) => (
