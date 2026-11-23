@@ -2,19 +2,17 @@ import { useState, useEffect } from "react";
 //    fetch(`https://restcountries.com/v3.1/name/${busca}`)
 
 function FILMES2() {
-  const [busca, setBusca] = useState("");
-  const [input, setInput] = useState("");
   const [filmes, setFilmes] = useState([]);
+  const [input, setInput] = useState("");
+  const [busca, setBusca] = useState("");
 
   useEffect(() => {
     if (busca === "") return;
-
-    fetch(`https://api.tvmaze.com/search/shows?q=${busca}`)
-      .then((resposta) => resposta.json())
+    fetch(`https://restcountries.com/v3.1/name/${busca}`)
+      .then((res) => res.json())
       .then((dados) => {
         console.log(dados);
         setFilmes(dados);
-        setInput("");
       })
       .catch((error) => {
         console.log(error);
@@ -23,21 +21,21 @@ function FILMES2() {
 
   return (
     <div>
-      <h1>Paises</h1>
+      <h1>Filmes</h1>
       <input
         type="text"
+        placeholder="Digite um filme!"
         value={input}
-        placeholder="Digite seu pais"
         onChange={(e) => setInput(e.target.value)}
       />
-
       <button onClick={() => setBusca(input)}>Buscar</button>
       <ul>
-        {filmes.map((item, index) => {
-          return <li key={index}>{item.show.name}</li>;
-        })}
+        {filmes.map((item, index) => (
+          <li key={index}>{item}</li>
+        ))}
       </ul>
     </div>
   );
 }
+
 export default FILMES2;

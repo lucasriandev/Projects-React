@@ -30,6 +30,7 @@ function ApiNome() {
       <input
         type="text"
         placeholder="Filtre um nome!"
+        value={input}
         onChange={(e) => setInput(e.target.value)}
       />
 
