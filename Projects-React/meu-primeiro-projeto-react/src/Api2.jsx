@@ -22,7 +22,7 @@ function LojaOnline() {
     input == ""
       ? produtos
       : produtos.filter((item) => {
-          return item.toLowerCase().includes(input.toLocaleLowerCase());
+          return item.title.toLowerCase().includes(input.toLocaleLowerCase());
         });
 
   return (
